@@ -39,7 +39,7 @@ package net.richardlord.asteroids
 		{
 			game = new Game();
 			gameState = new GameState( width, height );
-			creator = new EntityCreator( game );
+			creator = new EntityCreator( gameState, game );
 			keyPoll = new KeyPoll( container.stage );
 
 			game.addSystem( new GameManager( gameState, creator ), SystemPriorities.preUpdate );
