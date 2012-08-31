@@ -3,8 +3,7 @@ package net.richardlord.asteroids
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	[SWF(width='600', height='450', frameRate='60', backgroundColor='#000000')]
-
+	[SWF(width='320', height='240', frameRate='60', backgroundColor='#cccccc')]
 	public class Main extends Sprite
 	{
 		private var asteroids : Asteroids;
