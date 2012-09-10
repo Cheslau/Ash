@@ -6,6 +6,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.components.Asteroid;
 	import net.richardlord.asteroids.components.Bullet;
 	import net.richardlord.asteroids.components.Display;
+	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.components.Gun;
 	import net.richardlord.asteroids.components.GunControls;
 	import net.richardlord.asteroids.components.Motion;
@@ -19,6 +20,9 @@ package net.richardlord.asteroids
 
 	public class EntityCreator
 	{
+		[Inject]
+		public var gameState : GameState;
+		
 		private var game : Game;
 		
 		public function EntityCreator( game : Game )
@@ -46,7 +50,7 @@ package net.richardlord.asteroids
 		{
 			var spaceship : Entity = new Entity()
 				.add( new Spaceship() )
-				.add( new Position( 300, 225, 0, 6 ) )
+				.add( new Position( gameState.width / 2, gameState.height / 2, 0, 6 ) )
 				.add( new Motion( 0, 0, 0, 15 ) )
 				.add( new MotionControls( Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, 100, 3 ) )
 				.add( new Gun( 8, 0, 0.3, 2 ) )
