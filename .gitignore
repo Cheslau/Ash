@@ -32,3 +32,7 @@ bin-release/*
 Icon
 Thumbs.db
 .DS_Store
+
+# FlashDevelop
+obj/
+
