@@ -1,18 +1,26 @@
 package net.richardlord.asteroids.systems
 {
+	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.core.NodeList;
 	import net.richardlord.ash.core.System;
+	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.components.Motion;
 	import net.richardlord.asteroids.components.Position;
 	import net.richardlord.asteroids.nodes.MovementNode;
 
 	public class MovementSystem extends System
 	{
+		[Inject]
+		public var gameState : GameState;
+
 		[Inject(nodeType="net.richardlord.asteroids.nodes.MovementNode")]
 		public var nodes : NodeList;
-
+		
 		override public function update( time : Number ) : void
 		{
+			var areaWidth:int = gameState.width;
+			var areaHeight:int = gameState.height;
+			
 			var node : MovementNode;
 			var position : Position;
 			var motion : Motion;
@@ -25,19 +33,19 @@ package net.richardlord.asteroids.systems
 				position.position.y += motion.velocity.y * time;
 				if ( position.position.x < 0 )
 				{
-					position.position.x += 600;
+					position.position.x += areaWidth;
 				}
-				if ( position.position.x > 600 )
+				if ( position.position.x > areaWidth )
 				{
-					position.position.x -= 600;
+					position.position.x -= areaWidth;
 				}
 				if ( position.position.y < 0 )
 				{
-					position.position.y += 450;
+					position.position.y += areaHeight;
 				}
-				if ( position.position.y > 450 )
+				if ( position.position.y > areaHeight )
 				{
-					position.position.y -= 450;
+					position.position.y -= areaHeight;
 				}
 				position.rotation += motion.angularVelocity * time;
 				if ( motion.damping > 0 )
