@@ -2,6 +2,7 @@ package net.richardlord.asteroids
 {
 	import net.richardlord.ash.integration.robotlegs.AshExtension;
 	import net.richardlord.asteroids.events.StartGameEvent;
+	import net.richardlord.asteroids.events.ShowScreenEvent;
 
 	import robotlegs.bender.core.api.IContext;
 	import robotlegs.bender.core.impl.ContextBuilder;
@@ -32,7 +33,10 @@ package net.richardlord.asteroids
 
 			var commandMap : IEventCommandMap = context.injector.getInstance( IEventCommandMap );
 			commandMap.map( StartGameEvent.START_GAME, StartGameEvent ).toCommand( StartAsteroids );
-			context.dispatcher.dispatchEvent( new StartGameEvent( this, stage.stageWidth, stage.stageHeight ) );
+			commandMap.map( ShowScreenEvent.SHOW_SCREEN, ShowScreenEvent ).toCommand( ShowScreen );
+			//context.dispatcher.dispatchEvent( new StartGameEvent( this, stage.stageWidth, stage.stageHeight ) );
+			
+			context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, this, 'startMenu'));
 		}
 	}
 }
