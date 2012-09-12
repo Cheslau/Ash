@@ -9,18 +9,25 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.events.StartGameEvent;
 	import org.swiftsuspenders.Injector;
+	import robotlegs.bender.core.api.IContext;
 	
 	/**
 	 * A start screen before the game starts
 	 * @author Abiyasa
 	 */
-	public class ShowScreen extends Sprite
+	public class ShowScreen
 	{
 		[Inject]
 		public var injector:Injector;
 		
 		[Inject]
 		public var event:ShowScreenEvent;
+		
+		[Inject]
+		public var contextView:DisplayObjectContainer;
+		
+		[Inject]
+		public var context:IContext;
 
 		
 		public function ShowScreen()
@@ -40,11 +47,11 @@ package net.richardlord.asteroids
 		protected function prepareView():void
 		{
 			var screenDetails:String = event.details;
-			var container:DisplayObjectContainer = event.container;
 			
 			trace('will show screen', screenDetails);
 			
-			container.removeChildren();
+			// empty context view
+			contextView.removeChildren();
 			
 			// TODO check screen
 			
@@ -52,15 +59,17 @@ package net.richardlord.asteroids
 			
 			// add dummy button
 			var dummyButton:SimpleButton = createDummyButton('start');
-			dummyButton.x = (container.stage.stageWidth - dummyButton.width) / 2;
-			dummyButton.y = (container.stage.stageHeight - dummyButton.height) / 2;
-			container.addChild(dummyButton);
-			container.addEventListener(MouseEvent.CLICK, onClickDummyButton);
+			dummyButton.x = (contextView.stage.stageWidth - dummyButton.width) / 2;
+			dummyButton.y = (contextView.stage.stageHeight - dummyButton.height) / 2;
+			contextView.addChild(dummyButton);
+			dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
 		}
 		
 		protected function onClickDummyButton(theEvent:MouseEvent):void
 		{
 			// TODO dispath event
+			trace('click button')
+			context.dispatcher.dispatchEvent( new StartGameEvent( contextView, contextView.stage.stageWidth, contextView.stage.stageHeight ) );
 		}
 		
 		/**

@@ -36,7 +36,7 @@ package net.richardlord.asteroids
 			commandMap.map( ShowScreenEvent.SHOW_SCREEN, ShowScreenEvent ).toCommand( ShowScreen );
 			//context.dispatcher.dispatchEvent( new StartGameEvent( this, stage.stageWidth, stage.stageHeight ) );
 			
-			context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, this, 'startMenu'));
+			context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
 		}
 	}
 }

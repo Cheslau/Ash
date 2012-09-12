@@ -8,19 +8,17 @@ package net.richardlord.asteroids.events
 		public static const SHOW_SCREEN:String = "showScreen";
 		
 		public var details:String;
-		public var container:DisplayObjectContainer;
 		
-		public function ShowScreenEvent(type:String, mainContainer:DisplayObjectContainer, screenDetails:String = null)
+		public function ShowScreenEvent(type:String, screenDetails:String = null)
 		{
 			super(type);
 			
-			this.container = mainContainer;
 			details = screenDetails;
 		}
 		
 		override public function clone() : Event
 		{
-			return new ShowScreenEvent(type, container, details);
+			return new ShowScreenEvent(type, details);
 		}
 	}
 }
