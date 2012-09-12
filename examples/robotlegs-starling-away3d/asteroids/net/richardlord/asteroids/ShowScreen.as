@@ -54,8 +54,16 @@ package net.richardlord.asteroids
 			contextView.removeChildren();
 			
 			// TODO check screen
+			switch (screenDetails)
+			{
+			case 'startMenu':
+				break;
+				
+			case 'playGame':
+				break;
+			}
 			
-			// TODO mapping?
+			// TODO map view and view mediator
 			
 			// add dummy button
 			var dummyButton:SimpleButton = createDummyButton('start');
