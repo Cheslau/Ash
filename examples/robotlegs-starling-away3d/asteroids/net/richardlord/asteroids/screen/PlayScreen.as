@@ -5,7 +5,6 @@ package net.richardlord.asteroids.screen
 	import net.richardlord.ash.tick.TickProvider;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.EntityCreator;
-	import net.richardlord.asteroids.events.StartGameEvent;
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
 	import net.richardlord.asteroids.systems.GameManager;

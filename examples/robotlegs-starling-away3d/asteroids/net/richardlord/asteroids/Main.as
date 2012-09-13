@@ -1,7 +1,6 @@
 package net.richardlord.asteroids
 {
 	import net.richardlord.ash.integration.robotlegs.AshExtension;
-	import net.richardlord.asteroids.events.StartGameEvent;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 
 	import robotlegs.bender.core.api.IContext;
@@ -32,10 +31,7 @@ package net.richardlord.asteroids
 				.build();
 				
 			var commandMap : IEventCommandMap = context.injector.getInstance( IEventCommandMap );
-			commandMap.map( StartGameEvent.START_GAME, StartGameEvent ).toCommand( StartAsteroids );
 			commandMap.map( ShowScreenEvent.SHOW_SCREEN, ShowScreenEvent ).toCommand( ShowScreen );
-			
-			//context.dispatcher.dispatchEvent( new StartGameEvent( this, stage.stageWidth, stage.stageHeight ) );
 			
 			context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
 		}
