@@ -2,6 +2,7 @@ package net.richardlord.asteroids.screen
 {
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
@@ -11,10 +12,35 @@ package net.richardlord.asteroids.screen
 	 */
 	public class ScreenBase extends Sprite
 	{
+		public static const DEBUG_TAG:String = 'ScreenBase';
 		
 		public function ScreenBase()
 		{
 			super();
+			this.addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
+		}
+		
+		/**
+		 * Initialize when added to stage
+		 * @param	event
+		 */
+		protected function init(e:Event):void
+		{
+			trace(DEBUG_TAG, 'init()');
+			
+			this.removeEventListener(Event.ADDED_TO_STAGE, init);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
+		}
+		
+		/**
+		 * Destroy when removed from stage
+		 * @param	e
+		 */
+		protected function destroy(e:Event):void
+		{
+			trace(DEBUG_TAG, 'destroy()');
+			
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 		}
 		
 		/**

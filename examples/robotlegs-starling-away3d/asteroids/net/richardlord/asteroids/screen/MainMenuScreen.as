@@ -39,16 +39,11 @@ package net.richardlord.asteroids.screen
 			this.addChild(dummyButton);
 			buttons.push(dummyButton);
 			dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
-			
-			this.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
-		protected function init(event:Event = null):void
+		override protected function init(event:Event):void
 		{
-			trace(DEBUG_TAG, 'init()');
-			
-			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			super.init(event);
 			
 			// centerized buttons
 			var stageWidth:int = this.stage.stageWidth;
@@ -60,9 +55,9 @@ package net.richardlord.asteroids.screen
 			}
 		}
 	
-		protected function destroy(e:Event):void
+		override protected function destroy(e:Event):void
 		{
-			trace(DEBUG_TAG, 'destroy()');
+			super.destroy(e);
 			
 			// TODO unmap stuff
 		}

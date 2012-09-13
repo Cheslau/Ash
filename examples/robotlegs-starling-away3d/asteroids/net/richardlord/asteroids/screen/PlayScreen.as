@@ -26,7 +26,7 @@ package net.richardlord.asteroids.screen
 	 * The game play screen
 	 * @author Abiyasa
 	 */
-	public class PlayScreen extends Sprite
+	public class PlayScreen extends ScreenBase
 	{
 		public static const DEBUG_TAG:String = 'PlayScreen';
 		
@@ -47,20 +47,11 @@ package net.richardlord.asteroids.screen
 			{
 				context = theContext;
 			}
-			
-			this.addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
 		}
 		
-		/**
-		 * Inits stuff when added to stage
-		 * @param	e
-		 */
-		protected function init(e:Event):void
+		override protected function init(e:Event):void
 		{
-			trace(DEBUG_TAG, 'init()');
-			
-			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			super.init(e);
 			
 			// init game
 			var injector:Injector = context.injector;
@@ -81,6 +72,12 @@ package net.richardlord.asteroids.screen
 			
 			// automatically start game
 			start();
+		}
+
+		override protected function destroy(e:Event):void
+		{
+			super.destroy(e);
+			// TODO unmap stuff
 		}
 		
 		/**
@@ -104,12 +101,7 @@ package net.richardlord.asteroids.screen
 			tickProvider.start();
 		}
 		
-		protected function destroy(e:Event):void
-		{
-			trace(DEBUG_TAG, 'destroy()');
-			
-			// TODO unmap stuff
-		}
+
 	}
 
 }
