@@ -7,7 +7,7 @@ package net.richardlord.asteroids
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
-	import net.richardlord.asteroids.events.StartGameEvent;
+	import net.richardlord.asteroids.screen.MainMenuScreen;
 	import org.swiftsuspenders.Injector;
 	import robotlegs.bender.core.api.IContext;
 	
@@ -28,7 +28,7 @@ package net.richardlord.asteroids
 		
 		[Inject]
 		public var context:IContext;
-
+		
 		
 		public function ShowScreen()
 		{
@@ -53,51 +53,20 @@ package net.richardlord.asteroids
 			// empty context view
 			contextView.removeChildren();
 			
-			// TODO check screen
+			// show screen based on event
 			switch (screenDetails)
 			{
 			case 'startMenu':
+				var mainMenuScreen:MainMenuScreen = new MainMenuScreen(context);
+				contextView.addChild(mainMenuScreen);
 				break;
 				
 			case 'playGame':
 				break;
 			}
 			
-			// TODO map view and view mediator
 			
-			// add dummy button
-			var dummyButton:SimpleButton = createDummyButton('start');
-			dummyButton.x = (contextView.stage.stageWidth - dummyButton.width) / 2;
-			dummyButton.y = (contextView.stage.stageHeight - dummyButton.height) / 2;
-			contextView.addChild(dummyButton);
-			dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
-		}
-		
-		protected function onClickDummyButton(theEvent:MouseEvent):void
-		{
-			// TODO dispath event
-			trace('click button')
-			context.dispatcher.dispatchEvent( new StartGameEvent( contextView, contextView.stage.stageWidth, contextView.stage.stageHeight ) );
-		}
-		
-		/**
-		 * Create dummy button
-		 * @return
-		 */
-		protected function createDummyButton(label:String = 'button'):SimpleButton
-		{
-			var texfield:TextField = new TextField();
-			texfield.width = 100;
-			texfield.height = 20;
-			texfield.defaultTextFormat = new TextFormat(null, null, 0x808080, null, null, null, null, null, 'center');
-			texfield.selectable = false;
-			texfield.text = label;
-			texfield.mouseEnabled = true;
-			texfield.border = true;
-			texfield.textColor = 0x808080;
-			texfield.borderColor = 0x808080;
 			
-			return new SimpleButton(texfield, texfield, texfield, texfield);
 		}
 		
 	}

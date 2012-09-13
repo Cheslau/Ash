@@ -30,10 +30,11 @@ package net.richardlord.asteroids
 				.withExtension( CommandMapExtension )
 				.withExtension( EventCommandMapExtension )
 				.build();
-
+				
 			var commandMap : IEventCommandMap = context.injector.getInstance( IEventCommandMap );
 			commandMap.map( StartGameEvent.START_GAME, StartGameEvent ).toCommand( StartAsteroids );
 			commandMap.map( ShowScreenEvent.SHOW_SCREEN, ShowScreenEvent ).toCommand( ShowScreen );
+			
 			//context.dispatcher.dispatchEvent( new StartGameEvent( this, stage.stageWidth, stage.stageHeight ) );
 			
 			context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
