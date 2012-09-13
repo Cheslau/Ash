@@ -8,6 +8,7 @@ package net.richardlord.asteroids
 	import flash.text.TextFormat;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.screen.MainMenuScreen;
+	import net.richardlord.asteroids.screen.PlayScreen;
 	import org.swiftsuspenders.Injector;
 	import robotlegs.bender.core.api.IContext;
 	
@@ -28,7 +29,6 @@ package net.richardlord.asteroids
 		
 		[Inject]
 		public var context:IContext;
-		
 		
 		public function ShowScreen()
 		{
@@ -62,11 +62,10 @@ package net.richardlord.asteroids
 				break;
 				
 			case 'playGame':
+				var playScreen:PlayScreen = new PlayScreen(context);
+				contextView.addChild(playScreen);
 				break;
 			}
-			
-			
-			
 		}
 		
 	}
