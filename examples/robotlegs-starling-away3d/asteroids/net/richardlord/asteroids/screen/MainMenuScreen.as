@@ -16,6 +16,8 @@ package net.richardlord.asteroids.screen
 	 */
 	public class MainMenuScreen extends ScreenBase
 	{
+		public static const DEBUG_TAG:String = 'MainMenuScreen';
+		
 		protected var buttons:Array = [];
 		
 		[Inject]
@@ -43,7 +45,10 @@ package net.richardlord.asteroids.screen
 		
 		protected function init(event:Event = null):void
 		{
+			trace(DEBUG_TAG, 'init()');
+			
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy);
 			
 			// centerized buttons
 			var stageWidth:int = this.stage.stageWidth;
@@ -55,6 +60,13 @@ package net.richardlord.asteroids.screen
 			}
 		}
 	
+		protected function destroy(e:Event):void
+		{
+			trace(DEBUG_TAG, 'destroy()');
+			
+			// TODO unmap stuff
+		}
+
 		protected function onClickDummyButton(e:MouseEvent):void
 		{
 			// dispath event
