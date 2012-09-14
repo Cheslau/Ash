@@ -45,6 +45,8 @@ package net.richardlord.asteroids.screen
 		{
 			super.init(event);
 			
+			trace(DEBUG_TAG, 'init()');
+			
 			// centerized buttons
 			var stageWidth:int = this.stage.stageWidth;
 			var stageHeight:int = this.stage.stageHeight;
@@ -58,6 +60,8 @@ package net.richardlord.asteroids.screen
 		override protected function destroy(e:Event):void
 		{
 			super.destroy(e);
+			
+			trace(DEBUG_TAG, 'destroy()');
 			
 			// TODO unmap stuff
 		}
