@@ -26,8 +26,6 @@ package net.richardlord.asteroids.screen
 		 */
 		protected function init(e:Event):void
 		{
-			trace(DEBUG_TAG, 'init()');
-			
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, destroy, false, 0, true);
 		}
@@ -38,8 +36,6 @@ package net.richardlord.asteroids.screen
 		 */
 		protected function destroy(e:Event):void
 		{
-			trace(DEBUG_TAG, 'destroy()');
-			
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
 		}
 		
