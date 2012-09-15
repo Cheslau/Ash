@@ -4,6 +4,7 @@ package net.richardlord.asteroids
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.tick.FrameTickProvider;
 	import net.richardlord.asteroids.components.GameState;
+	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
 	import net.richardlord.asteroids.systems.GameManager;
@@ -53,6 +54,12 @@ package net.richardlord.asteroids
 			tickProvider = new FrameTickProvider( container );
 		}
 		
+		private function destroy():void
+		{
+			game.removeAllEntities();
+			game.removeAllSystems();
+		}
+		
 		public function start() : void
 		{
 			gameState.level = 0;
@@ -60,8 +67,36 @@ package net.richardlord.asteroids
 			gameState.points = 0;
 			gameState.status = GameState.STATUS_PLAY;
 
-			tickProvider.add( game.update );
+			tickProvider.add(game.update);
+			tickProvider.add(playScreenTick);
 			tickProvider.start();
+		}
+		
+		public function stop():void
+		{
+			tickProvider.stop();
+			tickProvider.removeAll();
+		}
+	
+		
+		/**
+		 * For controlling frame loop
+		 * @param	time
+		 */
+		public function playScreenTick(time:Number):void
+		{
+			switch (gameState.status)
+			{
+			case GameState.STATUS_GAME_OVER:
+				stop();
+				destroy();
+				
+				// TODO trigger asteroids event?
+				
+				// trigger remove to go back to main menu
+				container.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
+				break;
+			}
 		}
 	}
 }
