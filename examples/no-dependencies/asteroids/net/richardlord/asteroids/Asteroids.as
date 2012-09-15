@@ -58,6 +58,7 @@ package net.richardlord.asteroids
 			gameState.level = 0;
 			gameState.lives = 3;
 			gameState.points = 0;
+			gameState.status = GameState.STATUS_PLAY;
 
 			tickProvider.add( game.update );
 			tickProvider.start();
