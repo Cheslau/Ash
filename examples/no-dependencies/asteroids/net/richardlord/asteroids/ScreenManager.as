@@ -3,6 +3,7 @@ package net.richardlord.asteroids
 	import flash.display.DisplayObjectContainer;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.screens.MainMenuScreen;
+	import net.richardlord.asteroids.screens.PlayScreen;
 	import net.richardlord.asteroids.screens.ScreenBase;
 	
 	/**
@@ -47,8 +48,7 @@ package net.richardlord.asteroids
 				break;
 				
 			case 'playGame':
-				// TODO add game screen
-				//theScreen = new PlayScreen(context);
+				theScreen = new PlayScreen();
 				break;
 			}
 			if (theScreen != null)
