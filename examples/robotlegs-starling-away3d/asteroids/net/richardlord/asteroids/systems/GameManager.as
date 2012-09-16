@@ -48,6 +48,7 @@ package net.richardlord.asteroids.systems
 				else
 				{
 					// game over
+					gameState.status = GameState.STATUS_GAME_OVER;
 				}
 			}
 
