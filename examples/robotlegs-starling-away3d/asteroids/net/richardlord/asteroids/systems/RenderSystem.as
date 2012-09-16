@@ -5,6 +5,7 @@ package net.richardlord.asteroids.systems
 	import net.richardlord.asteroids.components.Display;
 	import net.richardlord.asteroids.components.Position;
 	import net.richardlord.asteroids.nodes.RenderNode;
+	import net.richardlord.asteroids.screen.ScreenBase;
 
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -13,7 +14,7 @@ package net.richardlord.asteroids.systems
 	public class RenderSystem extends System
 	{
 		[Inject]
-		public var container : DisplayObjectContainer;
+		public var container : ScreenBase;
 		
 		[Inject(nodeType="net.richardlord.asteroids.nodes.RenderNode")]
 		public var nodes : NodeList;
