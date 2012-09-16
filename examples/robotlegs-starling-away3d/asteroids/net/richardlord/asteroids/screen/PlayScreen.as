@@ -5,6 +5,7 @@ package net.richardlord.asteroids.screen
 	import net.richardlord.ash.tick.TickProvider;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.EntityCreator;
+	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
 	import net.richardlord.asteroids.systems.GameManager;
@@ -37,6 +38,9 @@ package net.richardlord.asteroids.screen
 		// TODO this is still not working!
 		public var game:Game;
 		
+		/** The game state */
+		protected var _gameState:GameState;
+		
 		// TODO If injection works, remove param theContext
 		public function PlayScreen(theContext:IContext = null)
 		{
@@ -55,12 +59,58 @@ package net.richardlord.asteroids.screen
 			// init game
 			var injector:Injector = context.injector;
 			
-			injector.map(GameState).asSingleton();
+			_gameState = new GameState();
+			injector.map(ScreenBase).toValue(this);
+			injector.map(GameState).toValue(_gameState);
 			injector.map(EntityCreator).asSingleton();
 			injector.map(KeyPoll).toValue(new KeyPoll(this.stage));
 			injector.map(TickProvider).toValue(new FrameTickProvider(this));
 			
+			resetGame();
+			startGame();
+		}
+
+		override protected function destroy(e:Event):void
+		{
+			super.destroy(e);
+			
+			trace(DEBUG_TAG, 'destroy()');
+		}
+		
+		protected function destroyGame():void
+		{
+			var injector:Injector = context.injector;
+			
+			stopGame();
+			var tickProvider:TickProvider = injector.getInstance(TickProvider);
+			tickProvider.remove(playScreenTick);
+			tickProvider.remove(game.update);
+			
 			game = injector.getInstance(Game);
+			game.removeAllSystems();
+			game.removeAllEntities();
+			
+			// unmap stuff
+			injector.unmap(ScreenBase);
+			injector.unmap(GameState);
+			injector.unmap(EntityCreator);
+			injector.unmap(KeyPoll);
+			injector.unmap(TickProvider);
+		}
+		
+		/**
+		 * Resets and prepare the game system
+		 */
+		protected function resetGame():void
+		{
+			var injector:Injector = context.injector;
+			game = injector.getInstance(Game);
+			
+			// empty first
+			game.removeAllEntities();
+			game.removeAllSystems();
+			
+			// init systems
 			game.addSystem(new GameManager(), SystemPriorities.preUpdate);
 			game.addSystem(new MotionControlSystem(), SystemPriorities.update);
 			game.addSystem(new GunControlSystem(), SystemPriorities.update);
@@ -69,38 +119,60 @@ package net.richardlord.asteroids.screen
 			game.addSystem(new CollisionSystem(), SystemPriorities.resolveCollisions);
 			game.addSystem(new RenderSystem(), SystemPriorities.render);
 			
-			// automatically start game
-			start();
-		}
-
-		override protected function destroy(e:Event):void
-		{
-			super.destroy(e);
-			// TODO unmap stuff
+			// init ticker
+			var tickProvider:TickProvider = injector.getInstance(TickProvider);
+			tickProvider.add(playScreenTick);
+			tickProvider.add(game.update);
+			tickProvider.start();
 		}
 		
 		/**
 		 * Starts the game
 		 */
-		public function start() : void
+		protected function startGame():void
 		{
 			trace(DEBUG_TAG, 'start()');
 			
 			var injector:Injector = context.injector;
-			var gameState:GameState = injector.getInstance(GameState);
 			
-			gameState.level = 0;
-			gameState.lives = 3;
-			gameState.points = 0;
-			gameState.width = this.stage.stageWidth;
-			gameState.height = this.stage.stageHeight;
+			// reset game state
+			_gameState.level = 0;
+			_gameState.lives = 1;
+			_gameState.points = 0;
+			_gameState.width = this.stage.stageWidth;
+			_gameState.height = this.stage.stageHeight;
+			_gameState.status = GameState.STATUS_PLAY;
 
 			var tickProvider:TickProvider = injector.getInstance(TickProvider);
-			tickProvider.add(game.update);
 			tickProvider.start();
 		}
 		
-
+		/**
+		 * Stops the game loop
+		 */
+		protected function stopGame():void
+		{
+			var injector:Injector = context.injector;
+			var tickProvider:TickProvider = injector.getInstance(TickProvider);
+			tickProvider.stop();
+		}
+		
+		/**
+		 * For controlling frame loop
+		 * @param	time
+		 */
+		public function playScreenTick(time:Number):void
+		{
+			switch (_gameState.status)
+			{
+			case GameState.STATUS_GAME_OVER:
+				// trigger remove to go back to main menu
+				// TODO properr destroy
+				destroyGame();
+				context.dispatcher.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
+				break;
+			}
+		}
 	}
 
 }
