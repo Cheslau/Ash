@@ -35,7 +35,8 @@ package net.richardlord.asteroids.screens
 			
 			trace(DEBUG_TAG, 'destroy()');
 			
-			// TODO destroy game
+			// stop & destroy game
+			_asteroids.stop();
 			_asteroids = null;
 		}
 	}

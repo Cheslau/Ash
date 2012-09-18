@@ -76,9 +76,10 @@ package net.richardlord.asteroids
 		{
 			tickProvider.stop();
 			tickProvider.removeAll();
+			
+			destroy();
 		}
 	
-		
 		/**
 		 * For controlling frame loop
 		 * @param	time
@@ -88,8 +89,7 @@ package net.richardlord.asteroids
 			switch (gameState.status)
 			{
 			case GameState.STATUS_GAME_OVER:
-				stop();
-				destroy();
+				tickProvider.stop();
 				
 				// TODO trigger asteroids event?
 				
