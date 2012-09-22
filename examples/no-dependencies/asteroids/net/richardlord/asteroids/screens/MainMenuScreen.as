@@ -25,6 +25,9 @@ package net.richardlord.asteroids.screens
 			this.addChild(dummyButton);
 			buttons.push(dummyButton);
 			dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
+			
+			// add mapping between button name and event
+			_buttonEventMap['start'] = 'playGame';
 		}
 		
 		override protected function init(event:Event):void
@@ -45,11 +48,11 @@ package net.richardlord.asteroids.screens
 	
 		override protected function destroy(e:Event):void
 		{
-			super.destroy(e);
-			
 			trace(DEBUG_TAG, 'destroy()');
 			
 			// TODO unmap stuff
+			
+			super.destroy(e);
 		}
 
 		protected function onClickDummyButton(e:MouseEvent):void
@@ -58,9 +61,24 @@ package net.richardlord.asteroids.screens
 			var clickedButton:SimpleButton = e.currentTarget as SimpleButton;
 			if (clickedButton != null)
 			{
-				trace('click button ' + clickedButton.name)
+				var buttonName:String = clickedButton.name;
 				
-				dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'playGame'));
+				trace('click button ' + buttonName);
+				
+				// mapping between button name and event name
+				var eventName:String;
+				if (_buttonEventMap.hasOwnProperty(buttonName))
+				{
+					eventName = _buttonEventMap[buttonName];
+					
+					trace(DEBUG_TAG, 'will generate event', eventName);
+					
+					dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, eventName));
+				}
+				else  // unknown or unmapped button
+				{
+					trace(DEBUG_TAG, 'button is unmapped, cannot generate event');
+				}
 			}
 		}
 	}

@@ -5,6 +5,7 @@ package net.richardlord.asteroids.screens
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.utils.Dictionary;
 	
 	/**
 	 * Base for screen classes
@@ -14,9 +15,14 @@ package net.richardlord.asteroids.screens
 	{
 		public static const DEBUG_TAG:String = 'ScreenBase';
 		
+		/** Mapping between button name and event name */
+		protected var _buttonEventMap:Dictionary;
+		
 		public function ScreenBase()
 		{
 			super();
+			_buttonEventMap = new Dictionary();
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
 		}
 		
@@ -37,6 +43,7 @@ package net.richardlord.asteroids.screens
 		protected function destroy(e:Event):void
 		{
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, destroy);
+			_buttonEventMap = null;
 		}
 		
 		/**
