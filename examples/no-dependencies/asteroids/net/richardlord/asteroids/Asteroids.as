@@ -4,6 +4,7 @@ package net.richardlord.asteroids
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.tick.FrameTickProvider;
 	import net.richardlord.asteroids.components.GameState;
+	import net.richardlord.asteroids.events.AsteroidsEvent;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
@@ -91,10 +92,7 @@ package net.richardlord.asteroids
 			case GameState.STATUS_GAME_OVER:
 				tickProvider.stop();
 				
-				// TODO trigger asteroids event?
-				
-				// trigger remove to go back to main menu
-				container.dispatchEvent(new ShowScreenEvent(ShowScreenEvent.SHOW_SCREEN, 'startMenu'));
+				container.dispatchEvent(new AsteroidsEvent(AsteroidsEvent.GAME_OVER));
 				break;
 			}
 		}
