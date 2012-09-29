@@ -20,11 +20,18 @@ package net.richardlord.asteroids.screens
 		{
 			super();
 			
-			// add a dummy button
-			var dummyButton:SimpleButton = createDummyButton('start', 'start');
-			this.addChild(dummyButton);
-			buttons.push(dummyButton);
-			dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
+			// add dummy buttons
+			var buttonConfig:Array = [
+				{ label: 'start', name: 'start' },
+				{ label: 'start Starling', name: 'startStarling' }
+			];
+			for each (var buttonData:Object in buttonConfig)
+			{
+				var dummyButton:SimpleButton = createDummyButton(buttonData.name, buttonData.label);
+				this.addChild(dummyButton);
+				buttons.push(dummyButton);
+				dummyButton.addEventListener(MouseEvent.CLICK, onClickDummyButton);
+			}
 			
 			// add mapping between button name and event
 			_buttonEventMap['start'] = 'playGame';
@@ -37,12 +44,18 @@ package net.richardlord.asteroids.screens
 			trace(DEBUG_TAG, 'init()');
 			
 			// centerized buttons
+			const paddingTop:int = 100;
+			const gap:int = 5;
+			
 			var stageWidth:int = this.stage.stageWidth;
 			var stageHeight:int = this.stage.stageHeight;
+			var buttonY:int = paddingTop;
 			for each (var dummyButton:SimpleButton in buttons)
 			{
 				dummyButton.x = (stageWidth - dummyButton.width) / 2;
-				dummyButton.y = (stageHeight - dummyButton.height) / 2;
+				dummyButton.y = buttonY;
+				
+				buttonY += dummyButton.height + gap;
 			}
 		}
 	
