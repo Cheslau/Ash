@@ -9,6 +9,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
 	import net.richardlord.asteroids.systems.GameManager;
+	import net.richardlord.asteroids.systems.GameStateControlSystem;
 	import net.richardlord.asteroids.systems.GunControlSystem;
 	import net.richardlord.asteroids.systems.MotionControlSystem;
 	import net.richardlord.asteroids.systems.MovementSystem;
@@ -51,6 +52,7 @@ package net.richardlord.asteroids
 			game.addSystem( new MovementSystem( gameState ), SystemPriorities.move );
 			game.addSystem( new CollisionSystem( creator ), SystemPriorities.resolveCollisions );
 			game.addSystem( new RenderSystem( container ), SystemPriorities.render );
+			game.addSystem(new GameStateControlSystem(gameState, keyPoll), SystemPriorities.update);
 
 			tickProvider = new FrameTickProvider( container );
 		}
