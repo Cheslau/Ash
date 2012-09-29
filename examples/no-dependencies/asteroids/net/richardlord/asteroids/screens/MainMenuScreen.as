@@ -35,6 +35,7 @@ package net.richardlord.asteroids.screens
 			
 			// add mapping between button name and event
 			_buttonEventMap['start'] = 'playGame';
+			_buttonEventMap['startStarling'] = 'playGameStarling';
 		}
 		
 		override protected function init(event:Event):void

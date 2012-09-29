@@ -50,6 +50,10 @@ package net.richardlord.asteroids
 			case 'playGame':
 				theScreen = new PlayScreen();
 				break;
+				
+			case 'playGameStarling':
+				theScreen = new PlayScreen(PlayScreen.MODE_STARLING);
+				break;
 			}
 			if (theScreen != null)
 			{
