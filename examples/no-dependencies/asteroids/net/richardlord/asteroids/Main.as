@@ -2,6 +2,8 @@ package net.richardlord.asteroids
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	
 	[SWF(width='320', height='240', frameRate='60', backgroundColor='#ccccf0')]
 	public class Main extends Sprite
@@ -17,6 +19,9 @@ package net.richardlord.asteroids
 		private function init(event:Event):void
 		{
 			removeEventListener( Event.ENTER_FRAME, init );
+			
+			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			// starts the screen manager
 			_screenManager = new ScreenManager(this);
