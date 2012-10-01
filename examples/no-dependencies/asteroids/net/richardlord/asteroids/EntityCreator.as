@@ -13,8 +13,10 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.components.MotionControls;
 	import net.richardlord.asteroids.components.Position;
 	import net.richardlord.asteroids.components.Spaceship;
+	import net.richardlord.asteroids.components.StarlingDisplay;
 	import net.richardlord.asteroids.graphics.AsteroidView;
 	import net.richardlord.asteroids.graphics.BulletView;
+	import net.richardlord.asteroids.graphics.DummyQuad;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
 
 
@@ -39,8 +41,20 @@ package net.richardlord.asteroids
 			var asteroid : Entity = new Entity()
 				.add( new Asteroid() )
 				.add( new Position( x, y, 0, radius ) )
-				.add( new Motion( ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), Math.random() * 2 - 1, 0 ) )
-				.add( new Display( new AsteroidView( radius ) ) );
+				.add( new Motion( ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), Math.random() * 2 - 1, 0 ) );
+				
+			switch (gameState.renderMode)
+			{
+			case GameState.RENDER_MODE_STARLING:
+				// TODO replace with the real view
+				asteroid.add(new StarlingDisplay(new DummyQuad(radius)));
+				break;
+				
+			case GameState.RENDER_MODE_DISPLAY_LIST:
+			default:
+				asteroid.add(new Display(new AsteroidView(radius)));
+				break;
+			}
 			game.addEntity( asteroid );
 			return asteroid;
 		}
@@ -53,8 +67,21 @@ package net.richardlord.asteroids
 				.add( new Motion( 0, 0, 0, 15 ) )
 				.add( new MotionControls( Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, 100, 3 ) )
 				.add( new Gun( 8, 0, 0.3, 2 ) )
-				.add( new GunControls( Keyboard.Z ) )
-				.add( new Display( new SpaceshipView() ) );
+				.add( new GunControls( Keyboard.Z ) );
+				
+			switch (gameState.renderMode)
+			{
+			case GameState.RENDER_MODE_STARLING:
+				// TODO replace with the real view
+				spaceship.add(new StarlingDisplay(new DummyQuad(10, [ 0xFFFFFF, 0x009EEF, 0xFFFFFF, 0x009EEF ])));
+				break;
+				
+			case GameState.RENDER_MODE_DISPLAY_LIST:
+			default:
+				spaceship.add(new Display(new SpaceshipView()));
+				break;
+			}
+				
 			game.addEntity( spaceship );
 			return spaceship;
 		}
@@ -68,8 +95,21 @@ package net.richardlord.asteroids
 				.add( new Position(
 					cos * gun.offsetFromParent.x - sin * gun.offsetFromParent.y + parentPosition.position.x,
 					sin * gun.offsetFromParent.x + cos * gun.offsetFromParent.y + parentPosition.position.y, 0, 0 ) )
-				.add( new Motion( cos * 150, sin * 150, 0, 0 ) )
-				.add( new Display( new BulletView() ) );
+				.add( new Motion( cos * 150, sin * 150, 0, 0 ) );
+				
+			switch (gameState.renderMode)
+			{
+			case GameState.RENDER_MODE_STARLING:
+				// TODO replace with the real view
+				bullet.add(new StarlingDisplay(new DummyQuad(2, [ 0x009EEF ])));
+				break;
+				
+			case GameState.RENDER_MODE_DISPLAY_LIST:
+			default:
+				bullet.add(new Display(new BulletView()));
+				break;
+			}
+				
 			game.addEntity( bullet );
 			return bullet;
 		}
