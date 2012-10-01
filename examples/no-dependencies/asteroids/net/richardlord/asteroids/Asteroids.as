@@ -15,8 +15,11 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.systems.MotionControlSystem;
 	import net.richardlord.asteroids.systems.MovementSystem;
 	import net.richardlord.asteroids.systems.RenderSystem;
+	import net.richardlord.asteroids.systems.StarlingRenderSystem;
 	import net.richardlord.asteroids.systems.SystemPriorities;
 	import net.richardlord.input.KeyPoll;
+	import net.richardlord.asteroids.screens.DummyStarlingContainer;
+	import starling.events.Event;
 	
 	import starling.core.Starling;
 
@@ -42,6 +45,9 @@ package net.richardlord.asteroids
 		private var keyPoll:KeyPoll;
 		private var width:Number;
 		private var height:Number;
+		
+		protected var _starling:Starling;
+
 		
 		public function Asteroids(container:DisplayObjectContainer, width:Number, height:Number)
 		{
@@ -87,10 +93,16 @@ package net.richardlord.asteroids
 			case MODE_STARLING:
 				trace('init game for Starling');
 				
-				// TODO init starling engine
+				// init starling
 				Starling.multitouchEnabled = false;
+				Starling.handleLostContext = true;
 				
-				// TODO create render system
+				_starling = new Starling(DummyStarlingContainer, container.stage);
+				_starling.simulateMultitouch = false;
+				_starling.enableErrorChecking = true;
+				_starling.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+				
+				game.addSystem(new StarlingRenderSystem(container.stage), SystemPriorities.render);
 				break;
 				
 			case MODE_DISPLAY_LIST:
@@ -101,10 +113,30 @@ package net.richardlord.asteroids
 			}
 		}
 		
+		private function onContextCreated(event:Event):void
+		{
+			// Drop down to 30 FPS for software render mode
+			const driverInfo:String = _starling.context.driverInfo.toLowerCase();
+			if (driverInfo.indexOf("software") != -1)
+				_starling.nativeStage.frameRate = 30;
+				
+			trace('context created for Starling:', driverInfo);
+		}
+		
 		private function destroy():void
 		{
 			game.removeAllEntities();
 			game.removeAllSystems();
+			
+			switch (_mode)
+			{
+			case MODE_STARLING:
+				// TODO destroy starling
+				_starling.dispose();
+				_starling = null;
+				break;
+			}
+			
 		}
 		
 		public function start():void
@@ -114,6 +146,13 @@ package net.richardlord.asteroids
 			gameState.points = 0;
 			gameState.status = GameState.STATUS_PLAY;
 
+			switch (_mode)
+			{
+			case MODE_STARLING:
+				_starling.start();
+				break;
+			}
+			
 			tickProvider.add(game.update);
 			tickProvider.add(playScreenTick);
 			tickProvider.start();
@@ -123,6 +162,13 @@ package net.richardlord.asteroids
 		{
 			tickProvider.stop();
 			tickProvider.removeAll();
+			
+			switch (_mode)
+			{
+			case MODE_STARLING:
+				_starling.stop();
+				break;
+			}
 			
 			destroy();
 		}
