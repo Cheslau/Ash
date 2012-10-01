@@ -93,34 +93,61 @@ package net.richardlord.asteroids
 			case MODE_STARLING:
 				trace('init game for Starling');
 				
+				gameState.renderMode = GameState.RENDER_MODE_STARLING;
+				
 				// init starling
+				// Note: still have problems when init for the 2nd time (blank screen)
 				Starling.multitouchEnabled = false;
 				Starling.handleLostContext = true;
-				
 				_starling = new Starling(DummyStarlingContainer, container.stage);
 				_starling.simulateMultitouch = false;
 				_starling.enableErrorChecking = true;
-				_starling.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
-				
-				game.addSystem(new StarlingRenderSystem(container.stage), SystemPriorities.render);
+				_starling.addEventListener(Event.CONTEXT3D_CREATE, onStarlingContextCreated);
+				_starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
 				break;
 				
 			case MODE_DISPLAY_LIST:
 			default:
+				gameState.renderMode = GameState.RENDER_MODE_DISPLAY_LIST;
+				
 				trace('init game for DisplayList');
 				game.addSystem(new RenderSystem(container), SystemPriorities.render);
 				break;
 			}
 		}
 		
-		private function onContextCreated(event:Event):void
+		/**
+		 * Handle Starling context created
+		 * @param	event
+		 */
+		private function onStarlingContextCreated(event:Event):void
 		{
+			_starling.removeEventListener(Event.CONTEXT3D_CREATE, onStarlingContextCreated);
+			
 			// Drop down to 30 FPS for software render mode
 			const driverInfo:String = _starling.context.driverInfo.toLowerCase();
 			if (driverInfo.indexOf("software") != -1)
+			{
 				_starling.nativeStage.frameRate = 30;
 				
+				trace('dropping framerate to 30');
+			}
+
 			trace('context created for Starling:', driverInfo);
+		}
+		
+		/**
+		 *
+		 * @param	event
+		 */
+		private function onStarlingRootCreated(event:Event):void
+		{
+			_starling.removeEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
+			
+			trace('Starling root is ready!');
+			
+			// Starling is ready for rendering
+			game.addSystem(new StarlingRenderSystem(_starling), SystemPriorities.render);
 		}
 		
 		private function destroy():void
@@ -131,7 +158,7 @@ package net.richardlord.asteroids
 			switch (_mode)
 			{
 			case MODE_STARLING:
-				// TODO destroy starling
+				// TODO how to destroy starling properly?
 				_starling.dispose();
 				_starling = null;
 				break;
