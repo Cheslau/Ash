@@ -18,6 +18,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.graphics.BulletView;
 	import net.richardlord.asteroids.graphics.DummyQuad;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
+	import net.richardlord.asteroids.graphics.StarlingDisplayObjectConverter;
 
 
 	public class EntityCreator
@@ -46,8 +47,7 @@ package net.richardlord.asteroids
 			switch (gameState.renderMode)
 			{
 			case GameState.RENDER_MODE_STARLING:
-				// TODO replace with the real view
-				asteroid.add(new StarlingDisplay(new DummyQuad(radius)));
+				asteroid.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new AsteroidView(radius))));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
@@ -72,8 +72,7 @@ package net.richardlord.asteroids
 			switch (gameState.renderMode)
 			{
 			case GameState.RENDER_MODE_STARLING:
-				// TODO replace with the real view
-				spaceship.add(new StarlingDisplay(new DummyQuad(10, [ 0xFFFFFF, 0x009EEF, 0xFFFFFF, 0x009EEF ])));
+				spaceship.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new SpaceshipView())));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
@@ -100,8 +99,7 @@ package net.richardlord.asteroids
 			switch (gameState.renderMode)
 			{
 			case GameState.RENDER_MODE_STARLING:
-				// TODO replace with the real view
-				bullet.add(new StarlingDisplay(new DummyQuad(2, [ 0x009EEF ])));
+				bullet.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new BulletView())));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
