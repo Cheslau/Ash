@@ -36,6 +36,10 @@ package net.richardlord.asteroids.screens
 			// auto start game
 			_asteroids = new Asteroids(this, stage.stageWidth, stage.stageHeight);
 			
+			// event listeners
+			this.addEventListener(AsteroidsEvent.GAME_OVER, onGameOver, false, 0, true);
+			this.addEventListener(AsteroidsEvent.READY_TO_PLAY, onReadyToPlay, false, 0, true);
+			
 			// init game mode
 			var gameMode:int;
 			switch (_mode)
@@ -50,12 +54,18 @@ package net.richardlord.asteroids.screens
 				break;
 			}
 			_asteroids.init(gameMode);
+		}
+		
+		/**
+		 * Asteroids is ready for play
+		 * @param	event
+		 */
+		protected function onReadyToPlay(event:Event):void
+		{
+			trace(DEBUG_TAG, 'onReadyToPlay()');
 			
 			// starts game immediately
 			_asteroids.start();
-			
-			// event listeners
-			this.addEventListener(AsteroidsEvent.GAME_OVER, onGameOver, false, 0, true);
 		}
 		
 		override protected function destroy(e:Event):void
@@ -64,6 +74,7 @@ package net.richardlord.asteroids.screens
 			
 			// remove event listeners
 			this.removeEventListener(AsteroidsEvent.GAME_OVER, onGameOver);
+			this.removeEventListener(AsteroidsEvent.READY_TO_PLAY, onReadyToPlay);
 			
 			// stop & destroy game
 			_asteroids.stop();
