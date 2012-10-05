@@ -9,6 +9,7 @@ package net.richardlord.asteroids.events
 	public class AsteroidsEvent extends Event
 	{
 		public static const GAME_OVER:String = 'gameOver';
+		public static const READY_TO_PLAY:String = 'readyToPlay';
 		
 		public function AsteroidsEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
