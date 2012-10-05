@@ -1,5 +1,8 @@
 package net.richardlord.asteroids
 {
+	import away3d.core.managers.Stage3DManager;
+	import away3d.core.managers.Stage3DProxy;
+	import away3d.events.Stage3DEvent;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import net.richardlord.ash.core.Game;
@@ -20,9 +23,8 @@ package net.richardlord.asteroids
 	import net.richardlord.input.KeyPoll;
 	import net.richardlord.asteroids.screens.DummyStarlingContainer;
 	import starling.events.Event;
-	
 	import starling.core.Starling;
-
+	
 
 	public class Asteroids
 	{
@@ -31,6 +33,9 @@ package net.richardlord.asteroids
 		
 		// Stage for MODE_STARLING
 		private var _stage:Stage;
+		
+		private var _stage3dManager:Stage3DManager;
+		private var _stage3DProxy:Stage3DProxy;
 		
 		// the current game rendering mode (starling, Flash DisplayList)
 		private var _mode:int;
@@ -71,6 +76,13 @@ package net.richardlord.asteroids
 		 */
 		private function prepare():void
 		{
+			_stage = container.stage;
+			if (_stage == null)
+			{
+				throw new Error('Cannot access Stage');
+				return;
+			}
+			
 			game = new Game();
 			gameState = new GameState(width, height);
 			creator = new EntityCreator(gameState, game);
@@ -95,15 +107,7 @@ package net.richardlord.asteroids
 				
 				gameState.renderMode = GameState.RENDER_MODE_STARLING;
 				
-				// init starling
-				// Note: still have problems when init for the 2nd time (blank screen)
-				Starling.multitouchEnabled = false;
-				Starling.handleLostContext = true;
-				_starling = new Starling(DummyStarlingContainer, container.stage);
-				_starling.simulateMultitouch = false;
-				_starling.enableErrorChecking = true;
-				_starling.addEventListener(Event.CONTEXT3D_CREATE, onStarlingContextCreated);
-				_starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
+				initContext();
 				break;
 				
 			case MODE_DISPLAY_LIST:
@@ -112,28 +116,70 @@ package net.richardlord.asteroids
 				
 				trace('init game for DisplayList');
 				game.addSystem(new RenderSystem(container), SystemPriorities.render);
+				
+				notifyReadyToPlay();
 				break;
 			}
 		}
+
+		/**
+		 * Init stage3D context
+		 */
+		protected function initContext():void
+		{
+			// Define a new Stage3DManager for the Stage3D objects
+			_stage3dManager = Stage3DManager.getInstance(_stage);
+			
+			trace('init context for stage, stageWidth=' + _stage.stageWidth,
+				'stageHeight=' + _stage.stageHeight);
+		
+			// Create a new Stage3D proxy to contain the separate views
+			_stage3DProxy = _stage3dManager.getFreeStage3DProxy();
+			_stage3DProxy.addEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
+			_stage3DProxy.antiAlias = 8;
+			_stage3DProxy.color = 0x0;
+		}
 		
 		/**
-		 * Handle Starling context created
+		 * Context is done
 		 * @param	event
 		 */
-		private function onStarlingContextCreated(event:Event):void
+		protected function onContextCreated(event:Stage3DEvent):void
 		{
-			_starling.removeEventListener(Event.CONTEXT3D_CREATE, onStarlingContextCreated);
-			
 			// Drop down to 30 FPS for software render mode
-			const driverInfo:String = _starling.context.driverInfo.toLowerCase();
+			var driverInfo:String = _stage3DProxy.context3D.driverInfo.toLowerCase();
 			if (driverInfo.indexOf("software") != -1)
 			{
 				_starling.nativeStage.frameRate = 30;
 				
 				trace('dropping framerate to 30');
 			}
-
-			trace('context created for Starling:', driverInfo);
+			trace('context created:', driverInfo);
+			
+			switch (_mode)
+			{
+			case MODE_STARLING:
+				initStarling();
+				break;
+			}
+		}
+		
+		/**
+		 * Init starling
+		 */
+		protected function initStarling():void
+		{
+			trace('initStarling with context=', _stage3DProxy.stage3D.context3D.driverInfo,
+				'viewport=' + _stage3DProxy.viewPort);
+			
+			// init starling
+			// Note: still have problems when init for the 2nd time (blank screen)
+			Starling.multitouchEnabled = false;
+			Starling.handleLostContext = true;
+			_starling = new Starling(DummyStarlingContainer, _stage, _stage3DProxy.viewPort, _stage3DProxy.stage3D);
+			_starling.simulateMultitouch = false;
+			_starling.enableErrorChecking = true;
+			_starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
 		}
 		
 		/**
@@ -148,6 +194,9 @@ package net.richardlord.asteroids
 			
 			// Starling is ready for rendering
 			game.addSystem(new StarlingRenderSystem(_starling), SystemPriorities.render);
+			
+			// ready to play
+			notifyReadyToPlay();
 		}
 		
 		private function destroy():void
@@ -164,6 +213,16 @@ package net.richardlord.asteroids
 				break;
 			}
 			
+		}
+		
+		/**
+		 * Init process is done, ready to play
+		 */
+		protected function notifyReadyToPlay():void
+		{
+			trace('notifyReadyToPlay');
+			
+			container.dispatchEvent(new AsteroidsEvent(AsteroidsEvent.READY_TO_PLAY));
 		}
 		
 		public function start():void
