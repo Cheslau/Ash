@@ -1,5 +1,6 @@
 package net.richardlord.asteroids.systems
 {
+	import away3d.core.managers.Stage3DProxy;
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.core.NodeList;
 	import net.richardlord.ash.core.System;
@@ -18,11 +19,17 @@ package net.richardlord.asteroids.systems
 	public class StarlingRenderSystem extends System
 	{
 		public var container:DisplayObjectContainer;
+		public var stage3dProxy:Stage3DProxy;
+		public var starling:Starling;
+		
 		private var nodes:NodeList;
 		
-		public function StarlingRenderSystem(starling:Starling)
+		
+		public function StarlingRenderSystem(starling:Starling, stage3dproxy:Stage3DProxy)
 		{
 			this.container = starling.root as DisplayObjectContainer;
+			this.starling = starling;
+			this.stage3dProxy = stage3dproxy;
 		}
 		
 		override public function addToGame(game:Game):void
@@ -63,6 +70,11 @@ package net.richardlord.asteroids.systems
 				displayObject.y = position.position.y;
 				displayObject.rotation = position.rotation;
 			}
+			
+			// manually render the starling
+			stage3dProxy.clear();
+			starling.nextFrame();
+			stage3dProxy.present();
 		}
 
 		override public function removeFromGame(game:Game):void
