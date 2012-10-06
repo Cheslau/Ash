@@ -137,7 +137,7 @@ package net.richardlord.asteroids
 			_stage3DProxy = _stage3dManager.getFreeStage3DProxy();
 			_stage3DProxy.addEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
 			_stage3DProxy.antiAlias = 8;
-			_stage3DProxy.color = 0x0;
+			_stage3DProxy.color = 0x009EEF;
 		}
 		
 		/**
@@ -171,6 +171,9 @@ package net.richardlord.asteroids
 		{
 			trace('initStarling with context=', _stage3DProxy.stage3D.context3D.driverInfo,
 				'viewport=' + _stage3DProxy.viewPort);
+
+			// this might be hidden before?
+			_stage3DProxy.stage3D.visible = true;
 			
 			// init starling
 			// Note: still have problems when init for the 2nd time (blank screen)
@@ -193,7 +196,7 @@ package net.richardlord.asteroids
 			trace('Starling root is ready!');
 			
 			// Starling is ready for rendering
-			game.addSystem(new StarlingRenderSystem(_starling), SystemPriorities.render);
+			game.addSystem(new StarlingRenderSystem(_starling, _stage3DProxy), SystemPriorities.render);
 			
 			// ready to play
 			notifyReadyToPlay();
@@ -207,7 +210,10 @@ package net.richardlord.asteroids
 			switch (_mode)
 			{
 			case MODE_STARLING:
-				// TODO how to destroy starling properly?
+				_stage3DProxy.clear();
+				// need to hide this otherwise it will stay on stage
+				_stage3DProxy.stage3D.visible = false;
+				
 				_starling.dispose();
 				_starling = null;
 				break;
