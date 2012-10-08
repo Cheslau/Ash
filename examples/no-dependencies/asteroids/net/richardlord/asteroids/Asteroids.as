@@ -113,6 +113,8 @@ package net.richardlord.asteroids
 			case MODE_AWAY3D:
 				trace('init game for Away3D');
 				
+				gameState.renderMode = GameState.RENDER_MODE_AWAY3D;
+				
 				// TODO implement this
 				break;
 				

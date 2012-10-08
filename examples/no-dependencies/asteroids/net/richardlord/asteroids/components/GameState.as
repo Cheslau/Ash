@@ -18,6 +18,7 @@ package net.richardlord.asteroids.components
 		public var renderMode:int = RENDER_MODE_DISPLAY_LIST;
 		public static const RENDER_MODE_DISPLAY_LIST:int = 0;
 		public static const RENDER_MODE_STARLING:int = 1;
+		public static const RENDER_MODE_AWAY3D:int = 2;
 		
 		
 		public function GameState(width:Number = 0, height:Number = 0, initStatus:int = STATUS_INIT)
