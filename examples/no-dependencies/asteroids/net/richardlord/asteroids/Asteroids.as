@@ -1,5 +1,6 @@
 package net.richardlord.asteroids
 {
+	import away3d.containers.View3D;
 	import away3d.core.managers.Stage3DManager;
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.events.Stage3DEvent;
@@ -10,6 +11,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.events.AsteroidsEvent;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
+	import net.richardlord.asteroids.systems.Away3DRenderSystem;
 	import net.richardlord.asteroids.systems.BulletAgeSystem;
 	import net.richardlord.asteroids.systems.CollisionSystem;
 	import net.richardlord.asteroids.systems.GameManager;
@@ -52,6 +54,7 @@ package net.richardlord.asteroids
 		private var height:Number;
 		
 		protected var _starling:Starling;
+		protected var _away3dView:View3D;
 
 		
 		public function Asteroids(container:DisplayObjectContainer, width:Number, height:Number)
@@ -115,14 +118,15 @@ package net.richardlord.asteroids
 				
 				gameState.renderMode = GameState.RENDER_MODE_AWAY3D;
 				
-				// TODO implement this
+				initContext();
 				break;
 				
 			case MODE_DISPLAY_LIST:
 			default:
+				trace('init game for DisplayList');
+				
 				gameState.renderMode = GameState.RENDER_MODE_DISPLAY_LIST;
 				
-				trace('init game for DisplayList');
 				game.addSystem(new RenderSystem(container), SystemPriorities.render);
 				
 				notifyReadyToPlay();
@@ -169,6 +173,10 @@ package net.richardlord.asteroids
 			case MODE_STARLING:
 				initStarling();
 				break;
+				
+			case MODE_AWAY3D:
+				initAway3D();
+				break;
 			}
 		}
 		
@@ -207,6 +215,22 @@ package net.richardlord.asteroids
 			notifyReadyToPlay();
 		}
 		
+		private function initAway3D():void
+		{
+			_away3dView = new View3D();
+			_away3dView.camera.z = -300;
+			_away3dView.stage3DProxy = _stage3DProxy;
+			_away3dView.shareContext = true;
+			
+			// add view to container
+			container.addChild(_away3dView);
+			
+			game.addSystem(new Away3DRenderSystem(_away3dView), SystemPriorities.render);
+
+			// ready to play
+			notifyReadyToPlay();
+		}
+		
 		private function destroy():void
 		{
 			game.removeAllEntities();
@@ -219,6 +243,19 @@ package net.richardlord.asteroids
 				
 				_starling.dispose();
 				_starling = null;
+				
+				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
+				_stage3DProxy.dispose();
+				_stage3DProxy = null;
+				break;
+				
+			case MODE_AWAY3D:
+				_stage3DProxy.clear();
+				
+				container.removeChild(_away3dView);
+				// TODO do we need to do this?
+				//_away3dView.dispose();
+				_away3dView = null;
 				
 				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
 				_stage3DProxy.dispose();
