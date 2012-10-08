@@ -172,9 +172,6 @@ package net.richardlord.asteroids
 			trace('initStarling with context=', _stage3DProxy.stage3D.context3D.driverInfo,
 				'viewport=' + _stage3DProxy.viewPort);
 
-			// this might be hidden before?
-			_stage3DProxy.stage3D.visible = true;
-			
 			// init starling
 			// Note: still have problems when init for the 2nd time (blank screen)
 			Starling.multitouchEnabled = false;
@@ -211,11 +208,13 @@ package net.richardlord.asteroids
 			{
 			case MODE_STARLING:
 				_stage3DProxy.clear();
-				// need to hide this otherwise it will stay on stage
-				_stage3DProxy.stage3D.visible = false;
 				
 				_starling.dispose();
 				_starling = null;
+				
+				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
+				_stage3DProxy.dispose();
+				_stage3DProxy = null;
 				break;
 			}
 			
