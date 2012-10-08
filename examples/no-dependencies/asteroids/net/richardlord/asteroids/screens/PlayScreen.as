@@ -16,6 +16,7 @@ package net.richardlord.asteroids.screens
 		private var _mode:int;
 		public static const MODE_DISPLAY_LIST:int = 0;
 		public static const MODE_STARLING:int = 1;
+		public static const MODE_AWAY3D:int = 2;
 		
 		/**
 		 * Inits with rendering mode
@@ -46,6 +47,10 @@ package net.richardlord.asteroids.screens
 			{
 			case MODE_STARLING:
 				gameMode = Asteroids.MODE_STARLING;
+				break;
+				
+			case MODE_AWAY3D:
+				gameMode = Asteroids.MODE_AWAY3D;
 				break;
 				
 			case MODE_DISPLAY_LIST:

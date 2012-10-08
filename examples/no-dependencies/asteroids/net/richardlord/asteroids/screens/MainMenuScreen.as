@@ -23,7 +23,8 @@ package net.richardlord.asteroids.screens
 			// add dummy buttons
 			var buttonConfig:Array = [
 				{ label: 'start', name: 'start' },
-				{ label: 'start Starling', name: 'startStarling' }
+				{ label: 'start Starling', name: 'startStarling' },
+				{ label: 'start Away3D', name: 'startAway3D' }
 			];
 			for each (var buttonData:Object in buttonConfig)
 			{
@@ -36,6 +37,7 @@ package net.richardlord.asteroids.screens
 			// add mapping between button name and event
 			_buttonEventMap['start'] = 'playGame';
 			_buttonEventMap['startStarling'] = 'playGameStarling';
+			_buttonEventMap['startAway3D'] = 'playGameAway3D';
 		}
 		
 		override protected function init(event:Event):void
