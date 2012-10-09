@@ -34,8 +34,9 @@ package net.richardlord.asteroids.systems
 		override public function addToGame(game:Game):void
 		{
 			// init camera
-			view3D.camera.z = -300;
-			view3D.camera.y = -300;
+			view3D.camera.z = -240;
+			view3D.camera.y = 120;
+			view3D.camera.x = 160;
 			
 			nodes = game.getNodeList(Away3DRenderNode);
 			for(var node:Away3DRenderNode = nodes.head; node; node = node.next)
