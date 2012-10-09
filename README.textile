@@ -1,35 +1,28 @@
-h1. Ash: An entity framework for Actionscript games
+h1. Ashteroids, Asteroids Game using Ash Framework
 
-Ash is an Actionscript 3 entity framework for game development
+h2. What's this?
 
-h3. Source Code
+This is my personal experiment project extending the Asteroids game example which originally comes with the Richard Lord's Ash Framework.
 
-* "Ash":http://github.com/richardlord/Ash
+The Asteroids example will be extended so it will be able to render the game in:
+- Flash's Display List (original)
+- Starling framework
+- Away3D
 
-h3. Examples
+This is also to show how easy it is using Ash framework to switch between renderers. In fact, the game logic and other components stay the same; the only difference is which renderer system is being used.
 
-* "Asteroids":http://github.com/richardlord/Ash/tree/master/examples
+For source and latest status, see https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
 
-h3. Documentation
+h2. Ash: An entity framework for Actionscript games
 
-There is no formal documentation as yet, but much of the source code contains as-doc comments.
+Ash framework is an entity-based framework for ActionScript games, made by Richard Lord.
 
-I've also written a few blog posts explaining how Ash works.
+For more info about Ash framework, see http://github.com/richardlord/Ash
 
+Some blog posts from Richard Lord explaining how Ash works:
 * "Ash - a new entity framework for Actionscript games.":http://www.richardlord.net/blog/introducing-ash
 * "What is an entity framework for game development.":http://www.richardlord.net/blog/what-is-an-entity-framework
 * "Why use an entity framework for game development.":http://www.richardlord.net/blog/why-use-an-entity-framework
-
-h3. Developers
-
-* "Richard Lord":http://www.richardlord.net/
-** "Richard on Twitter":http://twitter.com/Richard_Lord
-** "Richard on Github":http://github.com/richardlord
-
-h3. Thank you
-
-* Tom Davies, for "Ember":https://github.com/tdavies/Ember and "Ember2":https://github.com/tdavies/Ember2 and for the many discussions we've had about entity systems.
-* Alec McEachran, for "Xember":https://github.com/alecmce/xember and the discussions we've had about entity systems, particularly at "try{harder}":http://www.tryharder.org.uk/
 
 h2. License
 
