@@ -6,6 +6,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.components.Asteroid;
 	import net.richardlord.asteroids.components.Bullet;
 	import net.richardlord.asteroids.components.Display;
+	import net.richardlord.asteroids.components.Display3D;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.components.Gun;
 	import net.richardlord.asteroids.components.GunControls;
@@ -17,6 +18,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.graphics.AsteroidView;
 	import net.richardlord.asteroids.graphics.BulletView;
 	import net.richardlord.asteroids.graphics.DummyQuad;
+	import net.richardlord.asteroids.graphics.DummySphere;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
 	import net.richardlord.asteroids.graphics.StarlingDisplayObjectConverter;
 
@@ -50,6 +52,10 @@ package net.richardlord.asteroids
 				asteroid.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new AsteroidView(radius))));
 				break;
 				
+			case GameState.RENDER_MODE_AWAY3D:
+				asteroid.add(new Display3D(new DummySphere(radius)));
+				break;
+				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
 			default:
 				asteroid.add(new Display(new AsteroidView(radius)));
@@ -73,6 +79,10 @@ package net.richardlord.asteroids
 			{
 			case GameState.RENDER_MODE_STARLING:
 				spaceship.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new SpaceshipView())));
+				break;
+				
+			case GameState.RENDER_MODE_AWAY3D:
+				spaceship.add(new Display3D(new DummySphere(10)));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
@@ -100,6 +110,10 @@ package net.richardlord.asteroids
 			{
 			case GameState.RENDER_MODE_STARLING:
 				bullet.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new BulletView())));
+				break;
+				
+			case GameState.RENDER_MODE_AWAY3D:
+				bullet.add(new Display3D(new DummySphere(2)));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
