@@ -17,6 +17,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.components.StarlingDisplay;
 	import net.richardlord.asteroids.graphics.AsteroidView;
 	import net.richardlord.asteroids.graphics.BulletView;
+	import net.richardlord.asteroids.graphics.DummyCylinder;
 	import net.richardlord.asteroids.graphics.DummyQuad;
 	import net.richardlord.asteroids.graphics.DummySphere;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
@@ -82,7 +83,7 @@ package net.richardlord.asteroids
 				break;
 				
 			case GameState.RENDER_MODE_AWAY3D:
-				spaceship.add(new Display3D(new DummySphere(10)));
+				spaceship.add(new Display3D(new DummyCylinder(10)));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
