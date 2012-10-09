@@ -71,7 +71,7 @@ package net.richardlord.asteroids.systems
 				
 				object3D.x = position.position.x;
 				object3D.y = position.position.y;
-				object3D.rotationZ = position.rotation;
+				object3D.rotationZ = position.rotation * 180 / Math.PI;
 			}
 			
 			// render the view
