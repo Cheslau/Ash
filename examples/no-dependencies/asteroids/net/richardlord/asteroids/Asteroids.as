@@ -218,14 +218,13 @@ package net.richardlord.asteroids
 		private function initAway3D():void
 		{
 			_away3dView = new View3D();
-			_away3dView.camera.z = -300;
 			_away3dView.stage3DProxy = _stage3DProxy;
 			_away3dView.shareContext = true;
 			
 			// add view to container
 			container.addChild(_away3dView);
 			
-			game.addSystem(new Away3DRenderSystem(_away3dView), SystemPriorities.render);
+			game.addSystem(new Away3DRenderSystem(_away3dView, _stage3DProxy), SystemPriorities.render);
 
 			// ready to play
 			notifyReadyToPlay();
