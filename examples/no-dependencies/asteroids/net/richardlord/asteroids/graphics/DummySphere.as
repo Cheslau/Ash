@@ -2,6 +2,8 @@ package net.richardlord.asteroids.graphics
 {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.entities.Mesh;
+	import away3d.materials.ColorMaterial;
+	import away3d.primitives.SphereGeometry;
 	import away3d.primitives.WireframeSphere;
 	
 	/**
@@ -11,7 +13,7 @@ package net.richardlord.asteroids.graphics
 	public class DummySphere extends ObjectContainer3D
 	{
 		
-		public function DummySphere(size:int = 0, color:uint = 0xFFFFFF)
+		public function DummySphere(size:int = 0, color:uint = 0xFFFFFF, wireframe:Boolean = true)
 		{
 			super();
 			
@@ -21,8 +23,15 @@ package net.richardlord.asteroids.graphics
 				size = 10;
 			}
 			
-			var sphere:Mesh = new Mesh(new WireframeSphere(size, 16, 12, 0xFFFFFFFF));
-			this.addChild(sphere);
+			if (wireframe)
+			{
+				this.addChild(new WireframeSphere(size, 16, 12, 0xFFFFFFFF));
+			}
+			else
+			{
+				var material:ColorMaterial = new ColorMaterial(color);
+				this.addChild(new Mesh(new SphereGeometry(size), material));
+			}
 		}
 		
 	}
