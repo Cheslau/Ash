@@ -5,9 +5,9 @@ h2. What's this?
 This is my personal experiment project extending the Asteroids game example which originally comes with the Richard Lord's Ash Framework.
 
 The Asteroids example will be extended so it will be able to render the game in:
-- Flash's Display List (original)
-- Starling framework
-- Away3D
+* Flash's Display List (original)
+* Starling framework
+* Away3D
 
 This is also to show how easy it is using Ash framework to switch between renderers. In fact, the game logic and other components stay the same; the only difference is which renderer system is being used.
 
