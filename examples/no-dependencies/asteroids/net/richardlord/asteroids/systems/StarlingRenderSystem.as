@@ -10,6 +10,7 @@ package net.richardlord.asteroids.systems
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
+	import flash.display3D.Context3DCompareMode;
 	
 	
 	/**
@@ -30,6 +31,9 @@ package net.richardlord.asteroids.systems
 			this.container = starling.root as DisplayObjectContainer;
 			this.starling = starling;
 			this.stage3dProxy = stage3dproxy;
+			
+			// Note: for fixing transparent issue. see https://github.com/PrimaryFeather/Starling-Framework/issues/178
+			stage3dProxy.context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		}
 		
 		override public function addToGame(game:Game):void
