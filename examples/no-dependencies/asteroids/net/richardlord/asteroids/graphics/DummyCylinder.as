@@ -32,7 +32,9 @@ package net.richardlord.asteroids.graphics
 			else
 			{
 				var material:ColorMaterial = new ColorMaterial(color);
-				this.addChild(new Mesh(new CylinderGeometry(0, size * 0.25, size, 16, 1), material));
+				var cylinder:Mesh = new Mesh(new CylinderGeometry(0, size * 0.25, size, 16, 1), material);
+				cylinder.rotationZ = -90;
+				this.addChild(cylinder);
 			}
 		}
 		
