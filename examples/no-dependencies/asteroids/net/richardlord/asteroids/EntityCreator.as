@@ -83,7 +83,7 @@ package net.richardlord.asteroids
 				break;
 				
 			case GameState.RENDER_MODE_AWAY3D:
-				spaceship.add(new Display3D(new DummyCylinder(10)));
+				spaceship.add(new Display3D(new DummyCylinder(20)));
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
