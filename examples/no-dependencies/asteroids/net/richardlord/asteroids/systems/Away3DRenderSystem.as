@@ -17,26 +17,33 @@ package net.richardlord.asteroids.systems
 	
 	public class Away3DRenderSystem extends System
 	{
-		public var view3D:View3D;
+		public var container:DisplayObjectContainer;
 		public var stage3dProxy:Stage3DProxy;
 		
 		private var nodes:NodeList;
+		public var _view3D:View3D;
 		private var _scene:Scene3D;
 		
-		public function Away3DRenderSystem(view3D:View3D, stage3dproxy:Stage3DProxy)
+		public function Away3DRenderSystem(container:DisplayObjectContainer, stage3dproxy:Stage3DProxy)
 		{
-			this.view3D = view3D;
+			this.container = container;
 			this.stage3dProxy = stage3dproxy;
-			
-			_scene = view3D.scene;
 		}
 		
 		override public function addToGame(game:Game):void
 		{
+			// create view3D
+			_view3D = new View3D();
+			_view3D.stage3DProxy = this.stage3dProxy;
+			_view3D.shareContext = true;
+			container.addChild(_view3D);
+			
+			_scene = _view3D.scene;
+			
 			// init camera
-			view3D.camera.z = -240;
-			view3D.camera.y = stage3dProxy.viewPort.height / 2;
-			view3D.camera.x = stage3dProxy.viewPort.width / 2;
+			_view3D.camera.z = -240;
+			_view3D.camera.y = stage3dProxy.viewPort.height / 2;
+			_view3D.camera.x = stage3dProxy.viewPort.width / 2;
 			
 			nodes = game.getNodeList(Away3DRenderNode);
 			for(var node:Away3DRenderNode = nodes.head; node; node = node.next)
@@ -76,13 +83,19 @@ package net.richardlord.asteroids.systems
 			
 			// render the view
 			stage3dProxy.clear();
-			view3D.render();
+			_view3D.render();
 			stage3dProxy.present();
 		}
 
 		override public function removeFromGame(game:Game):void
 		{
 			nodes = null;
+			
+			container.removeChild(_view3D);
+			// TODO do we need to do this?
+			//_view3D.dispose();
+			_view3D = null;
+			_scene = null;
 		}
 	}
 }
