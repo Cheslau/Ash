@@ -35,8 +35,8 @@ package net.richardlord.asteroids.systems
 		{
 			// init camera
 			view3D.camera.z = -240;
-			view3D.camera.y = 120;
-			view3D.camera.x = 160;
+			view3D.camera.y = stage3dProxy.viewPort.height / 2;
+			view3D.camera.x = stage3dProxy.viewPort.width / 2;
 			
 			nodes = game.getNodeList(Away3DRenderNode);
 			for(var node:Away3DRenderNode = nodes.head; node; node = node.next)
