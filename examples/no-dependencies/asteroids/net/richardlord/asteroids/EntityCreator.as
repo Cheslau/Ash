@@ -72,10 +72,11 @@ package net.richardlord.asteroids
 				.add( new Spaceship() )
 				.add( new Position( gameState.width / 2, gameState.height / 2, 0, 6 ) )
 				.add( new Motion( 0, 0, 0, 15 ) )
-				.add( new MotionControls( Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, 100, 3 ) )
 				.add( new Gun( 8, 0, 0.3, 2 ) )
 				.add( new GunControls( Keyboard.Z ) );
-				
+			
+			// check render mode
+			var invertControl:Boolean = false;
 			switch (gameState.renderMode)
 			{
 			case GameState.RENDER_MODE_STARLING:
@@ -84,6 +85,7 @@ package net.richardlord.asteroids
 				
 			case GameState.RENDER_MODE_AWAY3D:
 				spaceship.add(new Display3D(new DummyCylinder(20)));
+				invertControl = true;
 				break;
 				
 			case GameState.RENDER_MODE_DISPLAY_LIST:
@@ -91,7 +93,10 @@ package net.richardlord.asteroids
 				spaceship.add(new Display(new SpaceshipView()));
 				break;
 			}
-				
+			
+			// controls need to be inverted on away3D
+			spaceship .add(new MotionControls(Keyboard.LEFT, Keyboard.RIGHT, Keyboard.UP, 100, 3, invertControl));
+			
 			game.addEntity( spaceship );
 			return spaceship;
 		}
