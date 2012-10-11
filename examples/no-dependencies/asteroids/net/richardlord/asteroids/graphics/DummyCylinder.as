@@ -25,7 +25,9 @@ package net.richardlord.asteroids.graphics
 			
 			if (wireframe)
 			{
-				this.addChild(new WireframeCylinder(0, size * 0.25, size, 16, 2, color));
+				var wireframeObject:WireframeCylinder = new WireframeCylinder(0, size * 0.25, size, 16, 2, color);
+				wireframeObject.rotationZ = -90;
+				this.addChild(wireframeObject);
 			}
 			else
 			{
