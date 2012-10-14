@@ -1,15 +1,18 @@
 package net.richardlord.asteroids.systems
 {
 	import away3d.core.managers.Stage3DProxy;
+	import flash.display.Stage;
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.core.NodeList;
 	import net.richardlord.ash.core.System;
 	import net.richardlord.asteroids.components.Position;
 	import net.richardlord.asteroids.components.StarlingDisplay;
 	import net.richardlord.asteroids.nodes.StarlingRenderNode;
+	import net.richardlord.asteroids.screens.DummyStarlingContainer;
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
+	import starling.events.Event;
 	import flash.display3D.Context3DCompareMode;
 	
 	
@@ -26,14 +29,42 @@ package net.richardlord.asteroids.systems
 		private var nodes:NodeList;
 		
 		
-		public function StarlingRenderSystem(starling:Starling, stage3dproxy:Stage3DProxy)
+		public function StarlingRenderSystem(stage:Stage, stage3Dproxy:Stage3DProxy)
 		{
+			this.stage3dProxy = stage3Dproxy;
+			
+			// init starling
+			Starling.multitouchEnabled = false;
+			Starling.handleLostContext = true;
+			starling = new Starling(DummyStarlingContainer, stage, stage3dProxy.viewPort, stage3dProxy.stage3D);
+			starling.simulateMultitouch = false;
+			starling.enableErrorChecking = true;
+			starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
+		}
+		
+		/**
+		 *
+		 * @param	event
+		 */
+		private function onStarlingRootCreated(event:Event):void
+		{
+			starling.removeEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
+			
+			trace('initStarling with context=', stage3dProxy.stage3D.context3D.driverInfo,
+				'viewport=' + stage3dProxy.viewPort);
+			trace('Starling root is ready!');
+			
+			// init Starling here
 			this.container = starling.root as DisplayObjectContainer;
-			this.starling = starling;
-			this.stage3dProxy = stage3dproxy;
 			
 			// Note: for fixing transparent issue. see https://github.com/PrimaryFeather/Starling-Framework/issues/178
 			stage3dProxy.context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
+			
+			// TODO should be handled by starling frame provider
+			starling.start();
+			
+			// TODO notify ready to play
+			//notifyReadyToPlay();
 		}
 		
 		override public function addToGame(game:Game):void
@@ -84,6 +115,12 @@ package net.richardlord.asteroids.systems
 		override public function removeFromGame(game:Game):void
 		{
 			nodes = null;
+			
+			// TODO should be handled by starling frame provider
+			starling.stop();
+			
+			starling.dispose();
+			starling = null;
 		}
 		
 	}

@@ -22,9 +22,7 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.systems.StarlingRenderSystem;
 	import net.richardlord.asteroids.systems.SystemPriorities;
 	import net.richardlord.input.KeyPoll;
-	import net.richardlord.asteroids.screens.DummyStarlingContainer;
-	import starling.events.Event;
-	import starling.core.Starling;
+	import flash.utils.setTimeout;
 	
 
 	public class Asteroids
@@ -52,7 +50,6 @@ package net.richardlord.asteroids
 		private var width:Number;
 		private var height:Number;
 		
-		protected var _starling:Starling;
 		
 		public function Asteroids(container:DisplayObjectContainer, width:Number, height:Number)
 		{
@@ -116,11 +113,6 @@ package net.richardlord.asteroids
 				gameState.renderMode = GameState.RENDER_MODE_AWAY3D;
 				
 				initContext();
-				
-				game.addSystem(new Away3DRenderSystem(container, _stage3DProxy), SystemPriorities.render);
-
-				// ready to play
-				notifyReadyToPlay();
 				break;
 				
 			case MODE_DISPLAY_LIST:
@@ -164,53 +156,28 @@ package net.richardlord.asteroids
 			var driverInfo:String = _stage3DProxy.context3D.driverInfo.toLowerCase();
 			if (driverInfo.indexOf("software") != -1)
 			{
-				_starling.nativeStage.frameRate = 30;
+				container.stage.frameRate = 30;
 				
 				trace('dropping framerate to 30');
 			}
 			trace('context created:', driverInfo);
-			
+
 			switch (_mode)
 			{
+			case MODE_AWAY3D:
+				game.addSystem(new Away3DRenderSystem(container, _stage3DProxy), SystemPriorities.render);
+			
+				// ready to play
+				notifyReadyToPlay();
+				break;
+			
 			case MODE_STARLING:
-				initStarling();
+				game.addSystem(new StarlingRenderSystem(container.stage, _stage3DProxy), SystemPriorities.render);
+				
+				// TODO wait until starling root is ready before start playing
+				setTimeout(notifyReadyToPlay, 1000);
 				break;
 			}
-		}
-		
-		/**
-		 * Init starling
-		 */
-		protected function initStarling():void
-		{
-			trace('initStarling with context=', _stage3DProxy.stage3D.context3D.driverInfo,
-				'viewport=' + _stage3DProxy.viewPort);
-
-			// init starling
-			// Note: still have problems when init for the 2nd time (blank screen)
-			Starling.multitouchEnabled = false;
-			Starling.handleLostContext = true;
-			_starling = new Starling(DummyStarlingContainer, _stage, _stage3DProxy.viewPort, _stage3DProxy.stage3D);
-			_starling.simulateMultitouch = false;
-			_starling.enableErrorChecking = true;
-			_starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
-		}
-		
-		/**
-		 *
-		 * @param	event
-		 */
-		private function onStarlingRootCreated(event:Event):void
-		{
-			_starling.removeEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
-			
-			trace('Starling root is ready!');
-			
-			// Starling is ready for rendering
-			game.addSystem(new StarlingRenderSystem(_starling, _stage3DProxy), SystemPriorities.render);
-			
-			// ready to play
-			notifyReadyToPlay();
 		}
 		
 		private function destroy():void
@@ -222,9 +189,6 @@ package net.richardlord.asteroids
 			{
 			case MODE_STARLING:
 				_stage3DProxy.clear();
-				
-				_starling.dispose();
-				_starling = null;
 				
 				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
 				_stage3DProxy.dispose();
@@ -245,7 +209,7 @@ package net.richardlord.asteroids
 		/**
 		 * Init process is done, ready to play
 		 */
-		protected function notifyReadyToPlay():void
+		protected function notifyReadyToPlay(event:Object = null):void
 		{
 			trace('notifyReadyToPlay');
 			
@@ -259,12 +223,8 @@ package net.richardlord.asteroids
 			gameState.points = 0;
 			gameState.status = GameState.STATUS_PLAY;
 
-			switch (_mode)
-			{
-			case MODE_STARLING:
-				_starling.start();
-				break;
-			}
+			// TODO should be handled by starling frame provider
+			//_starling.start();
 			
 			tickProvider.add(game.update);
 			tickProvider.add(playScreenTick);
@@ -275,13 +235,9 @@ package net.richardlord.asteroids
 		{
 			tickProvider.stop();
 			tickProvider.removeAll();
-			
-			switch (_mode)
-			{
-			case MODE_STARLING:
-				_starling.stop();
-				break;
-			}
+
+			// TODO should be handled by starling frame provider
+			//_starling.stop();
 			
 			destroy();
 		}
