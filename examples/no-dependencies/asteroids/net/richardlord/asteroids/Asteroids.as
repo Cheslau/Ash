@@ -9,9 +9,7 @@ package net.richardlord.asteroids
 	import starling.core.Starling;
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.core.Entity;
-	import net.richardlord.ash.tick.TickProvider;
 	import net.richardlord.ash.tick.FrameTickProvider;
-	import net.richardlord.ash.integration.starling.StarlingFrameTickProvider;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.events.AsteroidsEvent;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
@@ -42,7 +40,7 @@ package net.richardlord.asteroids
 		private var _stage3DProxy:Stage3DProxy;
 		
 		private var game:Game;
-		private var tickProvider:TickProvider;
+		private var tickProvider:FrameTickProvider;
 		private var creator:EntityCreator;
 		private var keyPoll:KeyPoll;
 		private var config : GameConfig;
@@ -225,18 +223,7 @@ package net.richardlord.asteroids
 		{
 			trace('start() the game');
 			
-			switch (config.renderMode)
-			{
-			// TODO Starling frame ticker is not working!
-			//case GameConfig.RENDER_MODE_STARLING:
-				//tickProvider = new StarlingFrameTickProvider(Starling.current.juggler);
-				//break;
-				
-			default:
-				tickProvider = new FrameTickProvider(container);
-				break;
-			}
-			
+			tickProvider = new FrameTickProvider(container);
 			tickProvider.add(game.update);
 			tickProvider.add(playScreenTick);
 			tickProvider.start();
