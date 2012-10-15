@@ -5,6 +5,7 @@ package net.richardlord.asteroids.screens
 	import net.richardlord.asteroids.events.ShowScreenEvent;
 	import net.richardlord.asteroids.events.AsteroidsEvent;
 	import net.richardlord.asteroids.screens.ScreenBase;
+	import net.richardlord.asteroids.GameConfig;
 	
 	/**
 	 * ...
@@ -35,7 +36,7 @@ package net.richardlord.asteroids.screens
 			trace(DEBUG_TAG, 'init()');
 			
 			// auto start game
-			_asteroids = new Asteroids(this, stage.stageWidth, stage.stageHeight);
+			_asteroids = new Asteroids(this);
 			
 			// event listeners
 			this.addEventListener(AsteroidsEvent.GAME_OVER, onGameOver, false, 0, true);
@@ -46,19 +47,20 @@ package net.richardlord.asteroids.screens
 			switch (_mode)
 			{
 			case MODE_STARLING:
-				gameMode = Asteroids.MODE_STARLING;
+				gameMode = GameConfig.RENDER_MODE_STARLING;
 				break;
 				
 			case MODE_AWAY3D:
-				gameMode = Asteroids.MODE_AWAY3D;
+				gameMode = GameConfig.RENDER_MODE_AWAY3D;
 				break;
 				
 			case MODE_DISPLAY_LIST:
 			default:
-				gameMode = Asteroids.MODE_DISPLAY_LIST;
+				gameMode = GameConfig.RENDER_MODE_DISPLAY_LIST;
 				break;
 			}
-			_asteroids.init(gameMode);
+			
+			_asteroids.init(gameMode, stage.stageWidth, stage.stageHeight);
 		}
 		
 		/**

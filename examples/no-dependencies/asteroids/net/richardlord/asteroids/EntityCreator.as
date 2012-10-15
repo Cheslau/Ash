@@ -22,22 +22,30 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.graphics.DummySphere;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
 	import net.richardlord.asteroids.graphics.StarlingDisplayObjectConverter;
-
+	import net.richardlord.asteroids.GameConfig;
 
 	public class EntityCreator
 	{
 		private var game : Game;
-		private var gameState : GameState;
+		private var gameConfig : GameConfig;
 		
-		public function EntityCreator( gameState:GameState, game : Game )
+		public function EntityCreator( gameConfig:GameConfig, game : Game )
 		{
 			this.game = game;
-			this.gameState = gameState;
+			this.gameConfig = gameConfig;
 		}
 		
 		public function destroyEntity( entity : Entity ) : void
 		{
 			game.removeEntity( entity );
+		}
+		
+		public function createGame() : Entity
+		{
+			var gameEntity : Entity = new Entity()
+				.add( new GameState() );
+			game.addEntity( gameEntity );
+			return gameEntity;
 		}
 
 		public function createAsteroid( radius : Number, x : Number, y : Number ) : Entity
@@ -47,17 +55,17 @@ package net.richardlord.asteroids
 				.add( new Position( x, y, 0, radius ) )
 				.add( new Motion( ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), ( Math.random() - 0.5 ) * 4 * ( 50 - radius ), Math.random() * 2 - 1, 0 ) );
 				
-			switch (gameState.renderMode)
+			switch (gameConfig.renderMode)
 			{
-			case GameState.RENDER_MODE_STARLING:
+			case GameConfig.RENDER_MODE_STARLING:
 				asteroid.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new AsteroidView(radius))));
 				break;
 				
-			case GameState.RENDER_MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				asteroid.add(new Display3D(new DummySphere(radius)));
 				break;
 				
-			case GameState.RENDER_MODE_DISPLAY_LIST:
+			case GameConfig.RENDER_MODE_DISPLAY_LIST:
 			default:
 				asteroid.add(new Display(new AsteroidView(radius)));
 				break;
@@ -70,25 +78,25 @@ package net.richardlord.asteroids
 		{
 			var spaceship : Entity = new Entity()
 				.add( new Spaceship() )
-				.add( new Position( gameState.width / 2, gameState.height / 2, 0, 6 ) )
+				.add( new Position( gameConfig.width / 2, gameConfig.height / 2, 0, 6 ) )
 				.add( new Motion( 0, 0, 0, 15 ) )
 				.add( new Gun( 8, 0, 0.3, 2 ) )
 				.add( new GunControls( Keyboard.Z ) );
 			
 			// check render mode
 			var invertControl:Boolean = false;
-			switch (gameState.renderMode)
+			switch (gameConfig.renderMode)
 			{
-			case GameState.RENDER_MODE_STARLING:
+			case GameConfig.RENDER_MODE_STARLING:
 				spaceship.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new SpaceshipView())));
 				break;
 				
-			case GameState.RENDER_MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				spaceship.add(new Display3D(new DummyCylinder(20)));
 				invertControl = true;
 				break;
 				
-			case GameState.RENDER_MODE_DISPLAY_LIST:
+			case GameConfig.RENDER_MODE_DISPLAY_LIST:
 			default:
 				spaceship.add(new Display(new SpaceshipView()));
 				break;
@@ -112,17 +120,17 @@ package net.richardlord.asteroids
 					sin * gun.offsetFromParent.x + cos * gun.offsetFromParent.y + parentPosition.position.y, 0, 0 ) )
 				.add( new Motion( cos * 150, sin * 150, 0, 0 ) );
 				
-			switch (gameState.renderMode)
+			switch (gameConfig.renderMode)
 			{
-			case GameState.RENDER_MODE_STARLING:
+			case GameConfig.RENDER_MODE_STARLING:
 				bullet.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new BulletView())));
 				break;
 				
-			case GameState.RENDER_MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				bullet.add(new Display3D(new DummySphere(2)));
 				break;
 				
-			case GameState.RENDER_MODE_DISPLAY_LIST:
+			case GameConfig.RENDER_MODE_DISPLAY_LIST:
 			default:
 				bullet.add(new Display(new BulletView()));
 				break;

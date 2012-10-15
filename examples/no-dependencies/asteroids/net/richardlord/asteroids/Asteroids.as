@@ -6,6 +6,7 @@ package net.richardlord.asteroids
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
 	import net.richardlord.ash.core.Game;
+	import net.richardlord.ash.core.Entity;
 	import net.richardlord.ash.tick.FrameTickProvider;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.events.AsteroidsEvent;
@@ -27,7 +28,7 @@ package net.richardlord.asteroids
 
 	public class Asteroids
 	{
-		// main container (DisplayList) for MODE_DISPLAY_LIST
+		// main container (DisplayList)
 		private var container:DisplayObjectContainer;
 		
 		// Stage for MODE_STARLING
@@ -36,35 +37,33 @@ package net.richardlord.asteroids
 		private var _stage3dManager:Stage3DManager;
 		private var _stage3DProxy:Stage3DProxy;
 		
-		// the current game rendering mode (starling, Flash DisplayList)
-		private var _mode:int;
-		public static const MODE_DISPLAY_LIST:int = 0;
-		public static const MODE_STARLING:int = 1;
-		public static const MODE_AWAY3D:int = 2;
-		
 		private var game:Game;
 		private var tickProvider:FrameTickProvider;
-		private var gameState:GameState;
 		private var creator:EntityCreator;
 		private var keyPoll:KeyPoll;
-		private var width:Number;
-		private var height:Number;
+		private var config : GameConfig;
+		private var gameState:GameState;
 		
 		
-		public function Asteroids(container:DisplayObjectContainer, width:Number, height:Number)
+		public function Asteroids(container:DisplayObjectContainer)
 		{
 			this.container = container;
-			this.width = width;
-			this.height = height;
 		}
 		
 		/**
 		 * Inits the game
-		 * @param	mode The rendering mode
+		 *
+		 * @param	mode The rendering mode. See GameConfig
+		 * @param	width screen width
+		 * @param	height screen height
 		 */
-		public function init(mode:int):void
+		public function init(renderMode:int, width:int, height:int):void
 		{
-			this._mode = mode;
+			config = new GameConfig();
+			config.width = width;
+			config.height = height;
+			config.renderMode = renderMode;
+
 			prepare();
 		}
 		
@@ -81,45 +80,42 @@ package net.richardlord.asteroids
 			}
 			
 			game = new Game();
-			gameState = new GameState(width, height);
-			creator = new EntityCreator(gameState, game);
+			creator = new EntityCreator(config, game);
 			keyPoll = new KeyPoll(container.stage);
 			
 			// add generic systems
-			game.addSystem(new GameManager(gameState, creator), SystemPriorities.preUpdate);
+			game.addSystem(new GameManager(creator, config), SystemPriorities.preUpdate);
 			game.addSystem(new MotionControlSystem(keyPoll), SystemPriorities.update);
 			game.addSystem(new GunControlSystem(keyPoll, creator), SystemPriorities.update);
 			game.addSystem(new BulletAgeSystem(creator), SystemPriorities.update);
-			game.addSystem(new MovementSystem(gameState), SystemPriorities.move);
+			game.addSystem(new MovementSystem(config), SystemPriorities.move);
 			game.addSystem(new CollisionSystem(creator), SystemPriorities.resolveCollisions);
-			game.addSystem(new GameStateControlSystem(gameState, keyPoll), SystemPriorities.update);
-			
-			tickProvider = new FrameTickProvider(container);
+			game.addSystem(new GameStateControlSystem(keyPoll), SystemPriorities.update);
 			
 			// handle rendering system
-			switch (_mode)
+			switch (config.renderMode)
 			{
-			case MODE_STARLING:
+			case GameConfig.RENDER_MODE_STARLING:
 				trace('init game for Starling');
 				
-				gameState.renderMode = GameState.RENDER_MODE_STARLING;
+				config.renderMode = GameConfig.RENDER_MODE_STARLING;
 				
 				initContext();
 				break;
 				
-			case MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				trace('init game for Away3D');
 				
-				gameState.renderMode = GameState.RENDER_MODE_AWAY3D;
+				config.renderMode = GameConfig.RENDER_MODE_AWAY3D;
 				
 				initContext();
 				break;
 				
-			case MODE_DISPLAY_LIST:
+			case GameConfig.RENDER_MODE_DISPLAY_LIST:
 			default:
 				trace('init game for DisplayList');
 				
-				gameState.renderMode = GameState.RENDER_MODE_DISPLAY_LIST;
+				config.renderMode = GameConfig.RENDER_MODE_DISPLAY_LIST;
 				
 				game.addSystem(new RenderSystem(container), SystemPriorities.render);
 				
@@ -162,16 +158,16 @@ package net.richardlord.asteroids
 			}
 			trace('context created:', driverInfo);
 
-			switch (_mode)
+			switch (config.renderMode)
 			{
-			case MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				game.addSystem(new Away3DRenderSystem(container, _stage3DProxy), SystemPriorities.render);
 			
 				// ready to play
 				notifyReadyToPlay();
 				break;
 			
-			case MODE_STARLING:
+			case GameConfig.RENDER_MODE_STARLING:
 				game.addSystem(new StarlingRenderSystem(container.stage, _stage3DProxy), SystemPriorities.render);
 				
 				// TODO wait until starling root is ready before start playing
@@ -185,9 +181,9 @@ package net.richardlord.asteroids
 			game.removeAllEntities();
 			game.removeAllSystems();
 			
-			switch (_mode)
+			switch (config.renderMode)
 			{
-			case MODE_STARLING:
+			case GameConfig.RENDER_MODE_AWAY3D:
 				_stage3DProxy.clear();
 				
 				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
@@ -195,7 +191,7 @@ package net.richardlord.asteroids
 				_stage3DProxy = null;
 				break;
 				
-			case MODE_AWAY3D:
+			case GameConfig.RENDER_MODE_STARLING:
 				_stage3DProxy.clear();
 				
 				_stage3DProxy.removeEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
@@ -203,7 +199,6 @@ package net.richardlord.asteroids
 				_stage3DProxy = null;
 				break;
 			}
-			
 		}
 		
 		/**
@@ -213,16 +208,18 @@ package net.richardlord.asteroids
 		{
 			trace('notifyReadyToPlay');
 			
+			var gameStateEntity:Entity = creator.createGame();
+			
+			// get the active game state
+			gameState = gameStateEntity.get(GameState) as GameState;
+			
 			container.dispatchEvent(new AsteroidsEvent(AsteroidsEvent.READY_TO_PLAY));
 		}
 		
 		public function start():void
 		{
-			gameState.level = 0;
-			gameState.lives = 3;
-			gameState.points = 0;
-			gameState.status = GameState.STATUS_PLAY;
-
+			tickProvider = new FrameTickProvider(container);
+			
 			// TODO should be handled by starling frame provider
 			//_starling.start();
 			
@@ -248,6 +245,7 @@ package net.richardlord.asteroids
 		 */
 		public function playScreenTick(time:Number):void
 		{
+			// TODO Is there any better way to notify game over?
 			switch (gameState.status)
 			{
 			case GameState.STATUS_GAME_OVER:

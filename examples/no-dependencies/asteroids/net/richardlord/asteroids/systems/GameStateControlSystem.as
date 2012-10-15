@@ -1,9 +1,11 @@
 package net.richardlord.asteroids.systems
 {
 	import net.richardlord.ash.core.Game;
+	import net.richardlord.ash.core.NodeList;
 	import net.richardlord.ash.core.System;
 	import flash.ui.Keyboard;
 	import net.richardlord.asteroids.components.GameState;
+	import net.richardlord.asteroids.nodes.GameNode;
 	import net.richardlord.input.KeyPoll;
 
 	/**
@@ -13,14 +15,18 @@ package net.richardlord.asteroids.systems
 	public class GameStateControlSystem extends System
 	{
 		private var keyPoll:KeyPoll;
-		private var gameState:GameState;
+		private var gameNodes:NodeList;
 		
-		public function GameStateControlSystem(gameState:GameState, keyPoll:KeyPoll)
+		public function GameStateControlSystem(keyPoll:KeyPoll)
 		{
 			super();
 			
 			this.keyPoll = keyPoll;
-			this.gameState = gameState;
+		}
+		
+		override public function addToGame( game : Game ) : void
+		{
+			gameNodes = game.getNodeList( GameNode );
 		}
 
 		override public function update(time:Number):void
@@ -28,8 +34,9 @@ package net.richardlord.asteroids.systems
 			// change game state based on keypressed
 			if (keyPoll.isDown(Keyboard.ESCAPE))
 			{
-				// escape to quite game
-				gameState.status = GameState.STATUS_GAME_OVER;
+				// escape to quit game
+				var gameState:GameNode = gameNodes.head as GameNode;
+				gameState.state.status = GameState.STATUS_GAME_OVER;
 			}
 		}
 		
@@ -37,7 +44,7 @@ package net.richardlord.asteroids.systems
 		{
 			super.removeFromGame(game);
 			
-			this.gameState = null;
+			this.gameNodes = null;
 			this.keyPoll = null;
 		}
 	}
