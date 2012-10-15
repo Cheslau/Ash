@@ -1,19 +1,27 @@
-h1. Ashteroids, Asteroids Game using Ash Framework
+# Ashteroids
+Asteroids Game using Ash Framework
 
-h2. What's this?
-
+## What's this?
 This is my personal experiment project extending the Asteroids game example which originally comes with the Richard Lord's Ash Framework.
 
-The Asteroids example will be extended so it will be able to render the game in:
+The Asteroids example will be extended so the game will have 3 rendering modes in one game:
 * Flash's Display List (original)
 * Starling framework
 * Away3D
 
-This is also to show how easy it is using Ash framework to switch between renderers. In fact, the game logic and other components stay the same; the only difference is which renderer system is being used.
+User will be able to select rendering mode before the game starts.
 
-For source and latest status, see https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
+[TODO attach screen shot]
 
-h2. Ash: An entity framework for Actionscript games
+This example is also to show how easy it is using Ash framework to switch between renderers. In fact, the game logic and other components stay the same; the only difference is which renderer system is being used.
+
+[TODO attach code]
+
+Currently, the user can only select rendering mode before the game starts. It is not possible to change the game rendering mode in the middle of the game; I just don't have time to do it ;-)
+
+For more source and latest status, see https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
+
+## Ash: An entity framework for Actionscript games
 
 Ash framework is an entity-based framework for ActionScript games, made by Richard Lord.
 
@@ -24,7 +32,7 @@ Some blog posts from Richard Lord explaining how Ash works:
 * "What is an entity framework for game development.":http://www.richardlord.net/blog/what-is-an-entity-framework
 * "Why use an entity framework for game development.":http://www.richardlord.net/blog/why-use-an-entity-framework
 
-h2. License
+## License
 
 Ash - an entity framework for Actionscript games
 ................................................
