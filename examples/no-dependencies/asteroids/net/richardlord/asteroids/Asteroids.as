@@ -5,9 +5,13 @@ package net.richardlord.asteroids
 	import away3d.events.Stage3DEvent;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Stage;
+	import net.richardlord.signals.SignalBase;
+	import starling.core.Starling;
 	import net.richardlord.ash.core.Game;
 	import net.richardlord.ash.core.Entity;
+	import net.richardlord.ash.tick.TickProvider;
 	import net.richardlord.ash.tick.FrameTickProvider;
+	import net.richardlord.ash.integration.starling.StarlingFrameTickProvider;
 	import net.richardlord.asteroids.components.GameState;
 	import net.richardlord.asteroids.events.AsteroidsEvent;
 	import net.richardlord.asteroids.events.ShowScreenEvent;
@@ -38,7 +42,7 @@ package net.richardlord.asteroids
 		private var _stage3DProxy:Stage3DProxy;
 		
 		private var game:Game;
-		private var tickProvider:FrameTickProvider;
+		private var tickProvider:TickProvider;
 		private var creator:EntityCreator;
 		private var keyPoll:KeyPoll;
 		private var config : GameConfig;
@@ -218,10 +222,16 @@ package net.richardlord.asteroids
 		
 		public function start():void
 		{
-			tickProvider = new FrameTickProvider(container);
-			
-			// TODO should be handled by starling frame provider
-			//_starling.start();
+			switch (config.renderMode)
+			{
+			case GameConfig.RENDER_MODE_STARLING:
+				tickProvider = new StarlingFrameTickProvider(Starling.current.juggler);
+				break;
+				
+			default:
+				tickProvider = new FrameTickProvider(container);
+				break;
+			}
 			
 			tickProvider.add(game.update);
 			tickProvider.add(playScreenTick);
@@ -231,11 +241,8 @@ package net.richardlord.asteroids
 		public function stop():void
 		{
 			tickProvider.stop();
-			tickProvider.removeAll();
+			(tickProvider as SignalBase).removeAll();
 
-			// TODO should be handled by starling frame provider
-			//_starling.stop();
-			
 			destroy();
 		}
 	

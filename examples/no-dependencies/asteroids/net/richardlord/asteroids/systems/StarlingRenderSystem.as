@@ -40,6 +40,7 @@ package net.richardlord.asteroids.systems
 			starling.simulateMultitouch = false;
 			starling.enableErrorChecking = true;
 			starling.addEventListener(Event.ROOT_CREATED, onStarlingRootCreated);
+			starling.start();
 		}
 		
 		/**
@@ -59,9 +60,6 @@ package net.richardlord.asteroids.systems
 			
 			// Note: for fixing transparent issue. see https://github.com/PrimaryFeather/Starling-Framework/issues/178
 			stage3dProxy.context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
-			
-			// TODO should be handled by starling frame provider
-			starling.start();
 			
 			// TODO notify ready to play
 			//notifyReadyToPlay();
@@ -116,9 +114,7 @@ package net.richardlord.asteroids.systems
 		{
 			nodes = null;
 			
-			// TODO should be handled by starling frame provider
 			starling.stop();
-			
 			starling.dispose();
 			starling = null;
 		}
