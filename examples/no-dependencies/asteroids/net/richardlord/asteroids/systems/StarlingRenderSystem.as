@@ -9,6 +9,7 @@ package net.richardlord.asteroids.systems
 	import net.richardlord.asteroids.components.StarlingDisplay;
 	import net.richardlord.asteroids.nodes.StarlingRenderNode;
 	import net.richardlord.asteroids.screens.DummyStarlingContainer;
+	import net.richardlord.signals.Signal0;
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
@@ -28,6 +29,8 @@ package net.richardlord.asteroids.systems
 		
 		private var nodes:NodeList;
 		
+		// Signal when the system is ready to be used
+		public var ready:Signal0 = new Signal0();
 		
 		public function StarlingRenderSystem(stage:Stage, stage3Dproxy:Stage3DProxy)
 		{
@@ -61,8 +64,8 @@ package net.richardlord.asteroids.systems
 			// Note: for fixing transparent issue. see https://github.com/PrimaryFeather/Starling-Framework/issues/178
 			stage3dProxy.context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 			
-			// TODO notify ready to play
-			//notifyReadyToPlay();
+			// notify ready
+			ready.dispatch();
 		}
 		
 		override public function addToGame(game:Game):void
