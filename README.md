@@ -2,25 +2,21 @@
 Asteroids Game using Ash Framework
 
 ## What's this?
-This is my personal experiment project extending the Asteroids game example which originally comes with the Richard Lord's [Ash Framework](http://github.com/richardlord/Ash).
+This is my personal experiment extending the Asteroids game example from Richard Lord's [Ash Framework](http://github.com/richardlord/Ash).
 
-The Asteroids example will be extended so the game will have 3 rendering modes in one game:
-	
+The Asteroids example is extended to support 3 rendering modes in one game:
+
 * Flash's Display List (original)
 * Starling framework
 * Away3D
 
 User will be able to select rendering mode before the game starts.
 
-[TODO attach screen shot]
+[TODO attach screen shots]
 
-This example is also to show how easy it is using Ash framework to switch between renderers. In fact, the game logic and other components stay the same; the only difference is which renderer system is being used.
-
-[TODO attach code]
-
-Currently, the user can only select rendering mode before the game starts. It is not possible to change the game rendering mode in the middle of the game; I just don't have time to do it ;-)
-
-For more source and latest status, see https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
+## Demo & Source
+Demo: 
+Source and latest status: https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
 
 ## Ash: An entity framework for Actionscript games
 
@@ -29,7 +25,7 @@ Ash framework is an entity-based framework for ActionScript games, made by Richa
 For more info about Ash framework, see http://github.com/richardlord/Ash
 
 Some blog posts from Richard Lord explaining how Ash works:
-	
+
 * "Ash - a new entity framework for Actionscript games.":http://www.richardlord.net/blog/introducing-ash
 * "What is an entity framework for game development.":http://www.richardlord.net/blog/what-is-an-entity-framework
 * "Why use an entity framework for game development.":http://www.richardlord.net/blog/why-use-an-entity-framework
@@ -46,7 +42,6 @@ Copyright (c) Richard Lord 2011-2012
 
 http://www.richardlord.net
 
-	
 Licence Agreement (The MIT License)
 
 
