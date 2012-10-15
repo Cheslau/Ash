@@ -172,10 +172,11 @@ package net.richardlord.asteroids
 				break;
 			
 			case GameConfig.RENDER_MODE_STARLING:
-				game.addSystem(new StarlingRenderSystem(container.stage, _stage3DProxy), SystemPriorities.render);
+				var starlingRenderSystem:StarlingRenderSystem = new StarlingRenderSystem(container.stage, _stage3DProxy);
+				game.addSystem(starlingRenderSystem, SystemPriorities.render);
 				
-				// TODO wait until starling root is ready before start playing
-				setTimeout(notifyReadyToPlay, 1000);
+				// wait until starling root is ready before start playing
+				starlingRenderSystem.ready.addOnce(notifyReadyToPlay);
 				break;
 			}
 		}
@@ -222,11 +223,14 @@ package net.richardlord.asteroids
 		
 		public function start():void
 		{
+			trace('start() the game');
+			
 			switch (config.renderMode)
 			{
-			case GameConfig.RENDER_MODE_STARLING:
-				tickProvider = new StarlingFrameTickProvider(Starling.current.juggler);
-				break;
+			// TODO Starling frame ticker is not working!
+			//case GameConfig.RENDER_MODE_STARLING:
+				//tickProvider = new StarlingFrameTickProvider(Starling.current.juggler);
+				//break;
 				
 			default:
 				tickProvider = new FrameTickProvider(container);
