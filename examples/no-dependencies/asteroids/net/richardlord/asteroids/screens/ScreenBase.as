@@ -55,13 +55,13 @@ package net.richardlord.asteroids.screens
 			var texfield:TextField = new TextField();
 			texfield.width = 100;
 			texfield.height = 20;
-			texfield.defaultTextFormat = new TextFormat(null, null, 0x808080, null, null, null, null, null, 'center');
+			texfield.defaultTextFormat = new TextFormat(null, null, 0xffffff, null, null, null, null, null, 'center');
 			texfield.selectable = false;
 			texfield.text = label;
 			texfield.mouseEnabled = true;
 			texfield.border = true;
-			texfield.textColor = 0x808080;
-			texfield.borderColor = 0x808080;
+			texfield.textColor = 0xffffff;
+			texfield.borderColor = 0xffffff;
 			
 			var theButton:SimpleButton = new SimpleButton(texfield, texfield, texfield, texfield);
 			theButton.name = name;

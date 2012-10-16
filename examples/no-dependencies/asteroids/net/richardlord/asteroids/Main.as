@@ -5,7 +5,7 @@ package net.richardlord.asteroids
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
-	[SWF(width='320', height='240', frameRate='60', backgroundColor='#ccccf0')]
+	[SWF(width='320', height='240', frameRate='60', backgroundColor='#009eef')]
 	public class Main extends Sprite
 	{
 		private var _screenManager:ScreenManager;
