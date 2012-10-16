@@ -30,6 +30,10 @@ Some blog posts from Richard Lord explaining how Ash works:
 * "What is an entity framework for game development.":http://www.richardlord.net/blog/what-is-an-entity-framework
 * "Why use an entity framework for game development.":http://www.richardlord.net/blog/why-use-an-entity-framework
 
+## Thanks & Credits
+* Richard Lord for the [Ash Framework](http://github.com/richardlord/Ash)
+* Daniel Cook for the [free assets](http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html)
+
 ## License
 
 Ash - an entity framework for Actionscript games
