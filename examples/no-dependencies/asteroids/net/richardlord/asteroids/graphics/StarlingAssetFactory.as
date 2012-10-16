@@ -44,8 +44,8 @@ package net.richardlord.asteroids.graphics
 			var tempResult:StarlingDisplay;
 			if (_useSprite)
 			{
-				// TODO handle radius
-				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(47, 32, 69, 75)));
+				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(47, 32, 69, 75),
+					radius * 2, radius * 2));
 			}
 			else
 			{
@@ -85,11 +85,44 @@ package net.richardlord.asteroids.graphics
 			return tempResult;
 		}
 		
-		protected function createStarlingImageFromTexture(region:Rectangle):Image
+		/**
+		 * Create a Starling image from the given sprite region.
+		 *
+		 * @param	region Region on the spritesheets
+		 * @param	width Set the image width manually. -1 will sets it automatically based on the texture width
+		 * @param	height Set the image height manually. -1 will sets it automatically based on the texture height
+		 * @return
+		 */
+		protected function createStarlingImageFromTexture(region:Rectangle, width:int = -1, height:int = -1):Image
 		{
 			var subTexture:SubTexture = new SubTexture(_spriteSheet, region);
 			var image:Image = new Image(subTexture);
-			image.readjustSize();
+			
+			if ((width < 0) && (height < 0))
+			{
+				image.readjustSize();
+			}
+			else
+			{
+				if (width < 0)
+				{
+					image.width = subTexture.width;
+				}
+				else
+				{
+					image.width = width;
+				}
+				
+				if (height < 0)
+				{
+					image.height = subTexture.height;
+				}
+				else
+				{
+					image.height = height;
+				}
+			}
+			
 			image.pivotX = image.width / 2;
 			image.pivotY = image.height / 2;
 			
