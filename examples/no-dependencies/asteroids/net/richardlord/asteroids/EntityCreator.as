@@ -21,13 +21,15 @@ package net.richardlord.asteroids
 	import net.richardlord.asteroids.graphics.DummyQuad;
 	import net.richardlord.asteroids.graphics.DummySphere;
 	import net.richardlord.asteroids.graphics.SpaceshipView;
-	import net.richardlord.asteroids.graphics.StarlingDisplayObjectConverter;
+	import net.richardlord.asteroids.graphics.StarlingAssetFactory;
 	import net.richardlord.asteroids.GameConfig;
+	
 
 	public class EntityCreator
 	{
 		private var game : Game;
 		private var gameConfig : GameConfig;
+		private var _starlingAssetFactory:StarlingAssetFactory;
 		
 		public function EntityCreator( gameConfig:GameConfig, game : Game )
 		{
@@ -42,6 +44,12 @@ package net.richardlord.asteroids
 		
 		public function createGame() : Entity
 		{
+			// init Starling asset generator
+			if (gameConfig.renderMode == GameConfig.RENDER_MODE_STARLING)
+			{
+				_starlingAssetFactory = new StarlingAssetFactory(true);
+			}
+			
 			var gameEntity : Entity = new Entity()
 				.add( new GameState() );
 			game.addEntity( gameEntity );
@@ -58,7 +66,7 @@ package net.richardlord.asteroids
 			switch (gameConfig.renderMode)
 			{
 			case GameConfig.RENDER_MODE_STARLING:
-				asteroid.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new AsteroidView(radius))));
+				asteroid.add(_starlingAssetFactory.createAsteroid(radius));
 				break;
 				
 			case GameConfig.RENDER_MODE_AWAY3D:
@@ -88,7 +96,7 @@ package net.richardlord.asteroids
 			switch (gameConfig.renderMode)
 			{
 			case GameConfig.RENDER_MODE_STARLING:
-				spaceship.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new SpaceshipView())));
+				spaceship.add(_starlingAssetFactory.createSpaceship());
 				break;
 				
 			case GameConfig.RENDER_MODE_AWAY3D:
@@ -123,7 +131,7 @@ package net.richardlord.asteroids
 			switch (gameConfig.renderMode)
 			{
 			case GameConfig.RENDER_MODE_STARLING:
-				bullet.add(new StarlingDisplay(new StarlingDisplayObjectConverter(new BulletView())));
+				bullet.add(_starlingAssetFactory.createUserBullet());
 				break;
 				
 			case GameConfig.RENDER_MODE_AWAY3D:
