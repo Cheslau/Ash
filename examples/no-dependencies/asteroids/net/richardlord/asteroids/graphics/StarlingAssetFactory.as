@@ -12,6 +12,7 @@ package net.richardlord.asteroids.graphics
 		import net.richardlord.asteroids.components.StarlingDisplay;
 		import net.richardlord.asteroids.graphics.StarlingDisplayObjectConverter;
 		import starling.display.Image;
+		import starling.textures.SubTexture;
 		import starling.textures.Texture;
 		
 		import net.richardlord.asteroids.graphics.AsteroidView;
@@ -43,7 +44,8 @@ package net.richardlord.asteroids.graphics
 			var tempResult:StarlingDisplay;
 			if (_useSprite)
 			{
-				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(-47, -32, 69, 75)));
+				// TODO handle radius
+				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(47, 32, 69, 75)));
 			}
 			else
 			{
@@ -58,7 +60,7 @@ package net.richardlord.asteroids.graphics
 			var tempResult:StarlingDisplay;
 			if (_useSprite)
 			{
-				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(-36, -6, 27, 21)));
+				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(36, 6, 27, 21)));
 			}
 			else
 			{
@@ -73,7 +75,7 @@ package net.richardlord.asteroids.graphics
 			var tempResult:StarlingDisplay;
 			if (_useSprite)
 			{
-				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(-9, -7, 11, 4)));
+				tempResult = new StarlingDisplay(createStarlingImageFromTexture(new Rectangle(9, 7, 11, 4)));
 			}
 			else
 			{
@@ -85,7 +87,7 @@ package net.richardlord.asteroids.graphics
 		
 		protected function createStarlingImageFromTexture(region:Rectangle):Image
 		{
-			var subTexture:Texture = Texture.fromTexture(_spriteSheet, null, region);
+			var subTexture:SubTexture = new SubTexture(_spriteSheet, region);
 			var image:Image = new Image(subTexture);
 			image.readjustSize();
 			image.pivotX = image.width / 2;
