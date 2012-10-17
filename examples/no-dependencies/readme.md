@@ -13,14 +13,17 @@ User will be able to select rendering mode before the game starts.
 
 [TODO attach screen shots]
 
+## Demo & Source
+For online demo: http://abiyasa.com/lab/away3d/ashteroids/
+
+## Multiple Rendering Modes
+
 **Note:** If you're not familiar with Ash Framework or entity-component system, checkout:
 
 * Games and Entity Systems: http://shaun.boyblack.co.za/blog/2012/08/04/games-and-entity-systems/
 * "Ash - a new entity framework for Actionscript games.":http://www.richardlord.net/blog/introducing-ash
 * "What is an entity framework for game development.":http://www.richardlord.net/blog/what-is-an-entity-framework
 * "Why use an entity framework for game development.":http://www.richardlord.net/blog/why-use-an-entity-framework
-
-## Multiple Rendering Modes
 
 Using Ash framework, it is easy to switch between renderers. The game logic and other components stay the same; the only difference is which renderer system is being used.
 
