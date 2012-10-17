@@ -55,7 +55,7 @@ package net.richardlord.asteroids.screens
 			var texfield:TextField = new TextField();
 			texfield.width = 100;
 			texfield.height = 20;
-			texfield.defaultTextFormat = new TextFormat(null, null, 0xffffff, null, null, null, null, null, 'center');
+			texfield.defaultTextFormat = new TextFormat("Tahoma, Geneva, sans-serif", null, 0xffffff, true, null, null, null, null, 'center');
 			texfield.selectable = false;
 			texfield.text = label;
 			texfield.mouseEnabled = true;
