@@ -85,5 +85,5 @@ Currently, the user can only select the rendering mode before the game starts. I
 - adding multi screen manager: **done**
 - add Starling support: **done**
 - add Away3D support: **done**
-- Enchanced graphics with Starling Sprite and animations: **not yet**
+- Enchanced graphics with Starling Sprite and animations: **done**
 - Change game rendering mode during the game: **not yet**
