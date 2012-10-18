@@ -7,13 +7,17 @@ This is my personal experiment extending the Asteroids game example from Richard
 The Asteroids example is extended to support 3 rendering modes in one game:
 
 * Flash Display List
+
 ![Flash Display List](http://abiyasa.com/lab/away3d/ashteroids/mode_native.png "Flash Display List")
 * Starling framework
+
 ![Starling mode](http://abiyasa.com/lab/away3d/ashteroids/mode_starling.png "Starling framework")
 * Away3D 4
+
 ![Away3D 4 mode](http://abiyasa.com/lab/away3d/ashteroids/mode_away3d.png "Away3D 4")
 
 User will be able to select rendering mode before the game starts.
+
 ![Mode selection](http://abiyasa.com/lab/away3d/ashteroids/main_menu.png "Mode selection")
 
 ## Demo & Source
