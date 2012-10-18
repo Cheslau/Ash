@@ -23,7 +23,7 @@ User will be able to select rendering mode before the game starts.
 ## Demo & Source
 For online demo: http://abiyasa.com/lab/away3d/ashteroids/
 
-Source and latest status: https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
+Source code and latest status: https://github.com/abiyasa/Ash/tree/master/examples/no-dependencies
 
 ## Ash: An entity framework for Actionscript games
 
